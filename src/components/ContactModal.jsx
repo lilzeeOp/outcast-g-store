@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { telegramLink, whatsappLink } from '../lib/contact';
+import { TELEGRAM_USERNAME, telegramLink, whatsappLink } from '../lib/contact';
 
 export default function ContactModal({ isOpen, onClose, title, message }) {
   useEffect(() => {
@@ -42,7 +42,7 @@ export default function ContactModal({ isOpen, onClose, title, message }) {
                 </span>
                 <span>
                   <strong>Message on Telegram</strong>
-                  <small>@{'outcastgstore'}</small>
+                  <small>@{TELEGRAM_USERNAME}</small>
                 </span>
               </a>
 
@@ -63,6 +63,14 @@ export default function ContactModal({ isOpen, onClose, title, message }) {
                 </span>
               </a>
             </div>
+
+            <a className="contact-qr" href={telegramLink()} target="_blank" rel="noopener noreferrer">
+              <img src="/brand/telegram-qr-small.png" alt={`Telegram QR code for @${TELEGRAM_USERNAME}`} width="96" height="119" loading="lazy" />
+              <span>
+                <strong>Scan to chat on Telegram</strong>
+                <small>Point your phone camera at the code to open @{TELEGRAM_USERNAME}</small>
+              </span>
+            </a>
 
             <p className="contact-modal__note">Demo links — placeholders until real contact details are added.</p>
       </div>

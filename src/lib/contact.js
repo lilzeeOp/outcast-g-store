@@ -1,4 +1,4 @@
-// TODO: swap these placeholders for the real handles before going live.
+// Telegram handle confirmed (@OUTCASTGSTORE). TODO: replace the WhatsApp placeholder before going live.
 export const TELEGRAM_USERNAME = 'outcastgstore';
 export const WHATSAPP_NUMBER = '910000000000'; // country code + number, no symbols
 

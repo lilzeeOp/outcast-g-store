@@ -513,6 +513,11 @@ p{margin:0}
 .contact-option--whatsapp{border-color:#e3f8ea}
 .contact-option--whatsapp .contact-option__icon{background:#25d366}
 .contact-option--whatsapp:hover{border-color:#25d366}
+.contact-qr{display:flex;align-items:center;gap:14px;margin-top:14px;padding:12px;border-radius:12px;border:1px dashed #cfe3f5;background:#f6fbff;transition:border-color .15s}
+.contact-qr:hover{border-color:#28a8e9}
+.contact-qr img{width:96px;height:auto;border-radius:8px;flex-shrink:0;background:#fff}
+.contact-qr strong{display:block;font-size:13px;color:var(--ink)}
+.contact-qr small{font-size:11.5px;color:var(--ink-faint);line-height:1.4}
 .contact-modal__note{margin-top:16px;font-size:11px;color:var(--ink-faint);text-align:center}
 
 /* ==========================================================================
