@@ -72,7 +72,7 @@ export default function ContactModal({ isOpen, onClose, title, message }) {
               </span>
             </a>
 
-            <p className="contact-modal__note">Demo links — placeholders until real contact details are added.</p>
+            <p className="contact-modal__note">Telegram is live. The WhatsApp number is a placeholder until the real one is added.</p>
       </div>
     </div>
   );
