@@ -22,7 +22,6 @@ export default function Category() {
   const [sort, setSort] = useState(searchParams.get('sort') || 'popular');
   const { items: catalog, ready: catalogReady } = useCatalog();
   const [page, setPage] = useState(1);
-  const [loading, setLoading] = useState(false);
 
   const cat = CATEGORIES.find((c) => c.key === key);
   const label = cat ? cat.label : key === 'deals' ? 'Deals' : 'All Games';
@@ -58,12 +57,6 @@ export default function Category() {
     setPage(1);
   }, [key, q, platformFilter, sort]);
 
-  // Brief skeleton flash to simulate an API round-trip when the page/filters change.
-  useEffect(() => {
-    setLoading(true);
-    const t = setTimeout(() => setLoading(false), 280);
-    return () => clearTimeout(t);
-  }, [key, q, platformFilter, sort, page]);
 
   function togglePlatform(p) {
     setPlatformFilter((prev) => (prev.includes(p) ? prev.filter((x) => x !== p) : [...prev, p]));
@@ -109,7 +102,7 @@ export default function Category() {
           ) : (
             <>
               <div className="grid-4">
-                {loading || (!catalogReady && (key === 'pc' || key === 'deals' || q))
+                {!catalogReady && (key === 'pc' || key === 'deals' || q)
                   ? Array.from({ length: pagedItems.length || PAGE_SIZE }, (_, i) => <SkeletonCard key={i} />)
                   : pagedItems.map((p) => <ProductCard product={p} key={p.id} />)}
               </div>
