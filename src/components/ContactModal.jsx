@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { TELEGRAM_USERNAME, telegramLink, whatsappLink } from '../lib/contact';
+import { TELEGRAM_USERNAME, generalMessage, telegramLink, whatsappLink } from '../lib/contact';
 
 export default function ContactModal({ isOpen, onClose, title, message, copyText }) {
   const [copied, setCopied] = useState(false);
@@ -32,7 +32,7 @@ export default function ContactModal({ isOpen, onClose, title, message, copyText
             <div className="contact-modal__options">
               <a
                 className="contact-option contact-option--telegram"
-                href={telegramLink(message || 'Hi! I want to buy a game from Outcast G Store.')}
+                href={telegramLink(message || generalMessage())}
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -49,7 +49,7 @@ export default function ContactModal({ isOpen, onClose, title, message, copyText
 
               <a
                 className="contact-option contact-option--whatsapp"
-                href={whatsappLink(message || 'Hi! I want to buy a game from Outcast G Store.')}
+                href={whatsappLink(message || generalMessage())}
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -81,7 +81,7 @@ export default function ContactModal({ isOpen, onClose, title, message, copyText
               </button>
             )}
 
-            <a className="contact-qr" href={telegramLink(message)} target="_blank" rel="noopener noreferrer">
+            <a className="contact-qr" href={telegramLink(message || generalMessage())} target="_blank" rel="noopener noreferrer">
               <img src="/brand/telegram-qr-small.png" alt={`Telegram QR code for @${TELEGRAM_USERNAME}`} width="96" height="119" loading="lazy" />
               <span>
                 <strong>Scan to chat on Telegram</strong>

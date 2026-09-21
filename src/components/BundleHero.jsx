@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { BUNDLES } from '../data/bundles';
 import ContactModal from './ContactModal';
+import { bundleMessage } from '../lib/contact';
 
 function inr(n) {
   return '₹' + n.toLocaleString('en-IN');
@@ -101,7 +102,7 @@ export default function BundleHero() {
         isOpen={contactOpen}
         onClose={() => setContactOpen(false)}
         title={`Buy the ${bundle.name}`}
-        message={`Hi! I'd like to buy the ${bundle.name} (${bundle.count}+ games) for ${inr(bundle.price)}.`}
+        message={bundleMessage(bundle)}
       />
     </div>
   );

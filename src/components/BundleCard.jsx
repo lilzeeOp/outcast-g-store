@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import ContactModal from './ContactModal';
+import { bundleMessage } from '../lib/contact';
 
 function inr(n) {
   return '₹' + n.toLocaleString('en-IN');
@@ -50,7 +51,7 @@ export default function BundleCard({ bundle }) {
         isOpen={contactOpen}
         onClose={() => setContactOpen(false)}
         title={`Buy the ${bundle.name}`}
-        message={`Hi! I'd like to buy the ${bundle.name} (${bundle.count}+ games) for ${inr(bundle.price)}.`}
+        message={bundleMessage(bundle)}
       />
     </motion.article>
   );

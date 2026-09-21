@@ -6,6 +6,7 @@ import { rankByQuery, useCatalog } from '../data/catalog';
 import { decodePicks, encodePicks, useVault } from '../context/VaultContext';
 import VaultTray from '../components/VaultTray';
 import ContactModal from '../components/ContactModal';
+import { vaultMessage } from '../lib/contact';
 import useDocumentTitle from '../hooks/useDocumentTitle';
 
 const PAGE = 24;
@@ -82,11 +83,9 @@ export default function VaultBuilder() {
 
   const code = encodePicks(pickIds);
   const shareUrl = `${window.location.origin}/bundles/build/${bundle.id}?picks=${code}`;
-  const titles = picks.map((p, i) => `${i + 1}. ${p.name.replace(/ PC$/, '')}`);
-  const listed = titles.slice(0, MESSAGE_CAP).join('\n');
-  const more = titles.length > MESSAGE_CAP ? `\n…and ${titles.length - MESSAGE_CAP} more (full list in the link below)` : '';
-  const message = `Hi! I'd like the ${bundle.name} (${bundle.count} games) for ${inr(bundle.price)}.\nMy picks (${picks.length}):\n${listed}${more}\n\nFull list: ${shareUrl}`;
-  const copyText = `${bundle.name} — ${picks.length} picks\n${titles.join('\n')}\n\n${shareUrl}`;
+  const titles = picks.map((p) => p.name.replace(/ PC$/, ''));
+  const message = vaultMessage(bundle, titles, shareUrl, MESSAGE_CAP);
+  const copyText = `${bundle.name} — ${picks.length} picks\n${titles.map((t, i) => `${i + 1}. ${t}`).join('\n')}\n\n${shareUrl}`;
 
   return (
     <div className="container vb">

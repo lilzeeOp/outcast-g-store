@@ -5,6 +5,7 @@ import PlatformIcon from './PlatformIcon';
 import OSIcon from './OSIcon';
 import ContactModal from './ContactModal';
 import { discountPct, formatINR, rating, reviewCount } from '../data/products';
+import { productMessage } from '../lib/contact';
 
 export default function ProductCard({ product }) {
   const off = discountPct(product);
@@ -79,7 +80,7 @@ export default function ProductCard({ product }) {
         isOpen={contactOpen}
         onClose={() => setContactOpen(false)}
         title={`Buy ${product.name}`}
-        message={`Hi! I'd like to buy ${product.name} for ${formatINR(product.now)}.`}
+        message={productMessage(product)}
       />
     </motion.article>
   );

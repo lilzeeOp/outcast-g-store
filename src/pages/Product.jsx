@@ -8,6 +8,7 @@ import ContactModal from '../components/ContactModal';
 import { discountPct, findProduct, formatINR, rating, reviewCount, PRODUCTS } from '../data/products';
 import { useRecentlyViewed } from '../context/RecentlyViewedContext';
 import useDocumentTitle from '../hooks/useDocumentTitle';
+import { pairMessage, productMessage } from '../lib/contact';
 import { useCatalog } from '../data/catalog';
 
 const FEATURES = [
@@ -141,7 +142,7 @@ export default function Product() {
                 onClick={() =>
                   setContact({
                     title: `Buy ${product.name}`,
-                    message: `Hi! I'd like to buy ${product.name} for ${formatINR(product.now)}.`,
+                    message: productMessage(product),
                   })
                 }
               >
@@ -182,9 +183,7 @@ export default function Product() {
                   onClick={() =>
                     setContact({
                       title: 'Buy both games',
-                      message: `Hi! I'd like to buy ${product.name} and ${bundleItem.name} together for ${formatINR(
-                        product.now + bundleItem.now
-                      )}.`,
+                      message: pairMessage(product, bundleItem),
                     })
                   }
                 >
