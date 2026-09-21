@@ -80,6 +80,7 @@ export default function ProductCard({ product }) {
         onClose={() => setContactOpen(false)}
         title={`Buy ${product.name}`}
         message={`Hi! I'd like to buy ${product.name} for ${formatINR(product.now)}.`}
+        tg={`p_${product.id}`}
       />
     </motion.article>
   );

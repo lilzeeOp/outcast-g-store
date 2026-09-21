@@ -102,6 +102,7 @@ export default function BundleHero() {
         onClose={() => setContactOpen(false)}
         title={`Buy the ${bundle.name}`}
         message={`Hi! I'd like to buy the ${bundle.name} (${bundle.count}+ games) for ${inr(bundle.price)}.`}
+        tg={`v_${bundle.id}_${bundle.count}`}
       />
     </div>
   );

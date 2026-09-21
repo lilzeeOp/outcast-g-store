@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { TELEGRAM_USERNAME, telegramLink, whatsappLink } from '../lib/contact';
+import { TELEGRAM_BOT, telegramLink, whatsappLink } from '../lib/contact';
 
-export default function ContactModal({ isOpen, onClose, title, message, copyText }) {
+export default function ContactModal({ isOpen, onClose, title, message, copyText, tg }) {
   const [copied, setCopied] = useState(false);
   useEffect(() => {
     if (!isOpen) return undefined;
@@ -32,7 +32,7 @@ export default function ContactModal({ isOpen, onClose, title, message, copyText
             <div className="contact-modal__options">
               <a
                 className="contact-option contact-option--telegram"
-                href={telegramLink()}
+                href={telegramLink(tg)}
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -43,7 +43,7 @@ export default function ContactModal({ isOpen, onClose, title, message, copyText
                 </span>
                 <span>
                   <strong>Message on Telegram</strong>
-                  <small>@{TELEGRAM_USERNAME}</small>
+                  <small>Opens @{TELEGRAM_BOT} — instant reply, team follows up</small>
                 </span>
               </a>
 
@@ -81,11 +81,11 @@ export default function ContactModal({ isOpen, onClose, title, message, copyText
               </button>
             )}
 
-            <a className="contact-qr" href={telegramLink()} target="_blank" rel="noopener noreferrer">
-              <img src="/brand/telegram-qr-small.png" alt={`Telegram QR code for @${TELEGRAM_USERNAME}`} width="96" height="119" loading="lazy" />
+            <a className="contact-qr" href={telegramLink(tg)} target="_blank" rel="noopener noreferrer">
+              <img src="/brand/telegram-qr-small.png" alt="Telegram QR code for Outcast G Store" width="96" height="119" loading="lazy" />
               <span>
                 <strong>Scan to chat on Telegram</strong>
-                <small>Point your phone camera at the code to open @{TELEGRAM_USERNAME}</small>
+                <small>Point your phone camera at the code to reach the Outcast G Store team</small>
               </span>
             </a>
 
