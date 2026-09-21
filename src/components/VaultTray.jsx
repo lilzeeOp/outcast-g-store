@@ -28,7 +28,7 @@ export default function VaultTray({ bundle, picks, onRemove, onClear, onFill, on
         <span style={{ width: `${pct}%` }} />
       </div>
       {count === 0 ? (
-        <p className="vault-tray__empty">Add games from the list. Anything you leave unpicked, we'll fill with top sellers.</p>
+        <p className="vault-tray__empty">Add games from the list, or tap "Fill remaining" to start from our top sellers. All {max} slots must be filled to order.</p>
       ) : (
         <ul className="vault-tray__list">
           {picks.map((p, i) => (
@@ -55,10 +55,14 @@ export default function VaultTray({ bundle, picks, onRemove, onClear, onFill, on
           </button>
         )}
       </div>
-      <button type="button" className="btn btn-primary vault-tray__checkout" disabled={count === 0} onClick={onCheckout}>
-        Continue with {count} game{count === 1 ? '' : 's'}
+      <button type="button" className="btn btn-primary vault-tray__checkout" disabled={remaining > 0} onClick={onCheckout}>
+        {remaining > 0 ? `Pick ${remaining} more to continue` : `Continue with ${count} games`}
       </button>
-      <p className="vault-tray__note">Flat price for the {bundle.name}. Keys delivered over Telegram or WhatsApp.</p>
+      <p className="vault-tray__note">
+        {remaining > 0
+          ? `Your vault needs all ${max} games before you can order. Use "Fill remaining" to top it up with top sellers.`
+          : `Flat price for the ${bundle.name}. Keys delivered over Telegram or WhatsApp.`}
+      </p>
     </>
   );
 
@@ -77,7 +81,7 @@ export default function VaultTray({ bundle, picks, onRemove, onClear, onFill, on
           </span>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" className="vault-bar__chev"><path d="m6 15 6-6 6 6" /></svg>
         </button>
-        <button type="button" className="btn btn-primary btn-sm" disabled={count === 0} onClick={onCheckout}>
+        <button type="button" className="btn btn-primary btn-sm" disabled={remaining > 0} onClick={onCheckout}>
           Continue
         </button>
       </div>

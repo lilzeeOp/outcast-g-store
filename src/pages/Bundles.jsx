@@ -26,7 +26,7 @@ export default function Bundles() {
         <h2>How it works</h2>
         <p>
           Pick a vault size, then choose the exact Steam titles you want using the vault builder — search our
-          catalogue and add games until the vault is full, or leave some slots for us to fill with top sellers.
+          catalogue and add games until the vault is full, or top it up with our top sellers in one click.
           When you continue, your list is sent to us on Telegram or WhatsApp and we confirm stock before you pay.
         </p>
       </div>
