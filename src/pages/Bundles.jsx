@@ -12,8 +12,8 @@ export default function Bundles() {
       </div>
       <h1>Game Bundle Packs</h1>
       <p className="lede">
-        One flat price, a whole vault of keys. Pick a tier, message us to lock it in, and we'll get your
-        keys delivered over Telegram or WhatsApp.
+        One flat price, a whole vault of keys. Pick a tier, choose the games you want from our full Steam
+        catalogue, and we'll deliver the keys over Telegram or WhatsApp.
       </p>
 
       <div className="bundle-grid">
@@ -25,9 +25,9 @@ export default function Bundles() {
       <div className="content-block" style={{ marginTop: 40 }}>
         <h2>How it works</h2>
         <p>
-          Bundles are curated batches of genuine PC game keys, grouped by tier rather than by title — you're
-          paying for library size and value, not picking individual games. Message us on Telegram or WhatsApp
-          after choosing a vault and we'll confirm what's currently in stock before you pay.
+          Pick a vault size, then choose the exact Steam titles you want using the vault builder — search our
+          catalogue and add games until the vault is full, or leave some slots for us to fill with top sellers.
+          When you continue, your list is sent to us on Telegram or WhatsApp and we confirm stock before you pay.
         </p>
       </div>
     </div>

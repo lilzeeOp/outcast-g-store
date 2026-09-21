@@ -1,7 +1,8 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { TELEGRAM_USERNAME, telegramLink, whatsappLink } from '../lib/contact';
 
-export default function ContactModal({ isOpen, onClose, title, message }) {
+export default function ContactModal({ isOpen, onClose, title, message, copyText }) {
+  const [copied, setCopied] = useState(false);
   useEffect(() => {
     if (!isOpen) return undefined;
     const onKey = (e) => e.key === 'Escape' && onClose();
@@ -63,6 +64,22 @@ export default function ContactModal({ isOpen, onClose, title, message }) {
                 </span>
               </a>
             </div>
+
+            {copyText && (
+              <button
+                type="button"
+                className="contact-copy"
+                onClick={() => {
+                  navigator.clipboard?.writeText(copyText).then(() => {
+                    setCopied(true);
+                    setTimeout(() => setCopied(false), 2000);
+                  });
+                }}
+              >
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" /><path d="M5 15V5a2 2 0 0 1 2-2h10" /></svg>
+                {copied ? 'Copied! Paste it into the chat' : 'Copy your game list to paste in chat'}
+              </button>
+            )}
 
             <a className="contact-qr" href={telegramLink()} target="_blank" rel="noopener noreferrer">
               <img src="/brand/telegram-qr-small.png" alt={`Telegram QR code for @${TELEGRAM_USERNAME}`} width="96" height="119" loading="lazy" />

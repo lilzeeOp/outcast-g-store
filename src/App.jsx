@@ -11,6 +11,7 @@ const Product = lazy(() => import('./pages/Product'));
 const About = lazy(() => import('./pages/About'));
 const Faq = lazy(() => import('./pages/Faq'));
 const Bundles = lazy(() => import('./pages/Bundles'));
+const VaultBuilder = lazy(() => import('./pages/VaultBuilder'));
 const Legal = lazy(() => import('./pages/Legal'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 
@@ -37,6 +38,7 @@ export default function App() {
           <Route path="about-us" element={<About />} />
           <Route path="faq" element={<Faq />} />
           <Route path="bundles" element={<Bundles />} />
+          <Route path="bundles/build/:tier" element={<VaultBuilder />} />
           <Route path="legal" element={<Legal />} />
           <Route path="*" element={<NotFound />} />
         </Route>

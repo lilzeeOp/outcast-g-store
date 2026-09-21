@@ -74,12 +74,15 @@ export default function BundleHero() {
                 {off > 0 && <span className="badge-off" style={{ position: 'static' }}>{off}% Off</span>}
               </div>
               <div className="bundle-hero__actions">
-                <button className="btn btn-primary" onClick={() => setContactOpen(true)}>
-                  Get This Vault
-                </button>
+                <Link to={`/bundles/build/${bundle.id}`} className="btn btn-primary">
+                  Choose Your Games
+                </Link>
                 <Link to="/bundles" className="btn btn-outline">
                   Compare All Vaults
                 </Link>
+                <button type="button" className="bundle-hero__alt" onClick={() => setContactOpen(true)}>
+                  Or just message us
+                </button>
               </div>
             </div>
           </motion.div>

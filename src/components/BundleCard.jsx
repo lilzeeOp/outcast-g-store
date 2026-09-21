@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import ContactModal from './ContactModal';
 
@@ -38,8 +39,11 @@ export default function BundleCard({ bundle }) {
         <span className="price-now">{inr(bundle.price)}</span>
         {off > 0 && <span className="badge-off">{off}% Off</span>}
       </div>
-      <button className="btn btn-primary" style={{ width: '100%' }} onClick={() => setContactOpen(true)}>
-        Get This Vault
+      <Link to={`/bundles/build/${bundle.id}`} className="btn btn-primary" style={{ width: '100%' }}>
+        Choose Your Games
+      </Link>
+      <button type="button" className="bundle-card__alt" onClick={() => setContactOpen(true)}>
+        Or let us pick — just message us
       </button>
 
       <ContactModal
