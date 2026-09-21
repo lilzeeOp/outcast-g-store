@@ -100,8 +100,8 @@ export default function VaultBuilder() {
           <span className="section__eyebrow">Build your vault</span>
           <h1>Choose your {bundle.count} games</h1>
           <p className="vb__lede">
-            Pick any Steam titles you want in your <strong>{bundle.name}</strong> for a flat {inr(bundle.price)}. Fill all {bundle.count}
-            slots yourself, or use “Fill remaining” to top up with top sellers.
+            Pick any Steam titles you want in your <strong>{bundle.name}</strong> for a flat {inr(bundle.price)}. Fill all {bundle.count} slots
+            yourself, or use “Fill remaining” to top up with top sellers.
           </p>
         </div>
         <div className="vb__tiers" role="tablist" aria-label="Switch vault tier">

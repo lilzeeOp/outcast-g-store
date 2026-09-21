@@ -110,10 +110,10 @@ export const PRODUCTS = [
 ];
 
 export const CATEGORIES = [
-  { key: 'pc', label: 'PC Games', color: '#0fa7fa', tint: '#eaf6ff' },
-  { key: 'consoles', label: 'Consoles & Memberships', color: '#6c5ce7', tint: '#f1eefe' },
-  { key: 'gift-cards', label: 'Gift Cards', color: '#f3b93b', tint: '#fff8e8' },
-  { key: 'deals', label: 'Deals', color: '#17c3c9', tint: '#e9fbfc' },
+  { key: 'pc', label: 'PC Games', color: '#3aa6ff', tint: 'rgba(58,166,255,.14)' },
+  { key: 'consoles', label: 'Consoles & Memberships', color: '#7cc6ff', tint: 'rgba(124,198,255,.12)' },
+  { key: 'gift-cards', label: 'Gift Cards', color: '#ffd166', tint: 'rgba(255,209,102,.12)' },
+  { key: 'deals', label: 'Deals', color: '#38bdf8', tint: 'rgba(56,189,248,.12)' },
 ];
 
 export function discountPct(p) {
