@@ -8,6 +8,7 @@ import ContactModal from '../components/ContactModal';
 import { discountPct, findProduct, formatINR, rating, reviewCount, stockLeft, PRODUCTS } from '../data/products';
 import { useRecentlyViewed } from '../context/RecentlyViewedContext';
 import useDocumentTitle from '../hooks/useDocumentTitle';
+import { useCatalog } from '../data/catalog';
 
 const FEATURES = [
   'Instant email delivery, 24/7',
@@ -18,6 +19,7 @@ const FEATURES = [
 
 export default function Product() {
   const { id } = useParams();
+  const { ready: catalogReady } = useCatalog();
   const product = findProduct(id);
   const { record } = useRecentlyViewed();
   const [contact, setContact] = useState(null);
@@ -32,6 +34,18 @@ export default function Product() {
     if (!product) return null;
     return PRODUCTS.find((p) => p.category === product.category && p.id !== product.id);
   }, [product]);
+
+  if (!product && !catalogReady) {
+    return (
+      <div className="container" style={{ paddingBlock: 80 }}>
+        <div className="boot-bars" style={{ margin: '0 auto' }}>
+          {[0, 1, 2, 3, 4].map((i) => (
+            <span key={i} style={{ animationDelay: `${i * 0.09}s` }} />
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   if (!product) {
     return (

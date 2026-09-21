@@ -3,6 +3,7 @@ import { Link, useParams, useSearchParams } from 'react-router-dom';
 import ProductCard from '../components/ProductCard';
 import SkeletonCard from '../components/SkeletonCard';
 import { CATEGORIES, PRODUCTS } from '../data/products';
+import { useCatalog } from '../data/catalog';
 import useDocumentTitle from '../hooks/useDocumentTitle';
 
 const PLATFORM_FILTERS = [
@@ -11,14 +12,15 @@ const PLATFORM_FILTERS = [
   { key: 'xbox', label: 'Xbox' },
   { key: 'nintendo', label: 'Nintendo' },
 ];
-const PAGE_SIZE = 8;
+const PAGE_SIZE = 24;
 
 export default function Category() {
   const { key } = useParams();
   const [searchParams] = useSearchParams();
   const q = (searchParams.get('q') || '').toLowerCase();
   const [platformFilter, setPlatformFilter] = useState([]);
-  const [sort, setSort] = useState('relevance');
+  const [sort, setSort] = useState(searchParams.get('sort') || 'popular');
+  const { items: catalog, ready: catalogReady } = useCatalog();
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
 
@@ -27,21 +29,28 @@ export default function Category() {
   useDocumentTitle(q ? `Search: ${q}` : label);
 
   const items = useMemo(() => {
-    let list = PRODUCTS;
+    // PC and Deals draw from the full Steam catalogue once it has loaded.
+    let list = key === 'pc' || key === 'deals' || q ? [...PRODUCTS, ...catalog] : PRODUCTS;
     if (key && key !== 'deals') list = list.filter((p) => p.category === key);
     if (key === 'deals') list = list.filter((p) => p.was > p.now);
     if (q) list = list.filter((p) => p.name.toLowerCase().includes(q));
     if (platformFilter.length) list = list.filter((p) => platformFilter.includes(p.platform));
 
     list = [...list];
+    if (sort === 'popular') list.sort((a, b) => (a.rank ?? -1) - (b.rank ?? -1));
     if (sort === 'price-asc') list.sort((a, b) => a.now - b.now);
     if (sort === 'price-desc') list.sort((a, b) => b.now - a.now);
     if (sort === 'discount') list.sort((a, b) => (1 - b.now / b.was) - (1 - a.now / a.was));
     return list;
-  }, [key, q, platformFilter, sort]);
+  }, [key, q, platformFilter, sort, catalog]);
 
   const pageCount = Math.max(1, Math.ceil(items.length / PAGE_SIZE));
   const pagedItems = items.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+
+  useEffect(() => {
+    const s = searchParams.get('sort');
+    if (s) setSort(s);
+  }, [searchParams]);
 
   // Reset to page 1 whenever the underlying result set changes.
   useEffect(() => {
@@ -86,6 +95,7 @@ export default function Category() {
           <div className="toolbar">
             <span style={{ fontSize: 13, color: 'var(--ink-soft)' }}>Showing {items.length} results</span>
             <select value={sort} onChange={(e) => setSort(e.target.value)} aria-label="Sort products">
+              <option value="popular">Sort: Most Popular</option>
               <option value="relevance">Sort: Relevance</option>
               <option value="price-asc">Price: Low to High</option>
               <option value="price-desc">Price: High to Low</option>
@@ -93,12 +103,12 @@ export default function Category() {
             </select>
           </div>
 
-          {items.length === 0 ? (
+          {items.length === 0 && catalogReady ? (
             <div className="empty-state">No games match these filters yet — try clearing a filter.</div>
           ) : (
             <>
               <div className="grid-4">
-                {loading
+                {loading || (!catalogReady && (key === 'pc' || key === 'deals' || q))
                   ? Array.from({ length: pagedItems.length || PAGE_SIZE }, (_, i) => <SkeletonCard key={i} />)
                   : pagedItems.map((p) => <ProductCard product={p} key={p.id} />)}
               </div>

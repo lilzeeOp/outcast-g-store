@@ -1,16 +1,39 @@
-# React + Vite
+# Outcast G Store
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Digital game key storefront built with React + Vite. Live at https://outcast-g-store.vercel.app
 
-Currently, two official plugins are available:
+## Develop
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+```
+npm install
+npm run dev      # http://127.0.0.1:5173
+npm run build    # production build in dist/
+npm run lint
+```
 
-## React Compiler
+## Catalogue
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Two sources feed the store:
 
-## Expanding the Oxlint configuration
+- `src/data/products.js` — curated products (spotlight AAA titles, memberships, consoles). Ships in the bundle.
+- `public/data/steam-catalog.json` — the top Steam games by ownership from SteamSpy, paid titles only.
+  Loaded lazily by `src/data/catalog.js` on the PC / Deals pages, product pages and search.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+Refresh the Steam catalogue (about one minute per 1,000 games because of SteamSpy's rate limit):
+
+```
+node scripts/fetch-steam-catalog.mjs 10
+```
+
+Every product is listed at a flat 60% off its Steam US list price (see `catalog.js` and the comment in `products.js`).
+
+## Contact links
+
+`src/lib/contact.js` holds the Telegram handle and WhatsApp number used by every Buy button.
+
+## Deploy
+
+```
+npx vercel --prod
+npx vercel alias set <deployment-url> outcast-g-store.vercel.app
+```

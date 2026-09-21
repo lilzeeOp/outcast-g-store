@@ -1,7 +1,8 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { PRODUCTS, formatINR } from '../data/products';
+import { formatINR } from '../data/products';
+import { loadCatalog, searchProducts, useCatalog } from '../data/catalog';
 import MobileNav from './MobileNav';
 
 const NAV = [
@@ -10,9 +11,9 @@ const NAV = [
     label: 'PC',
     to: '/category/pc',
     items: [
-      { label: 'PC Games', to: '/category/pc' },
-      { label: 'Steam Games', to: '/category/pc' },
-      { label: 'Time Cards & DLC', to: '/category/pc' },
+      { label: 'All PC Games', to: '/category/pc' },
+      { label: 'Top Sellers', to: '/category/pc?sort=popular' },
+      { label: 'Biggest Discounts', to: '/category/pc?sort=discount' },
     ],
   },
   {
@@ -35,22 +36,26 @@ const NAV = [
 export default function Header() {
   const [query, setQuery] = useState('');
   const [resultsOpen, setResultsOpen] = useState(false);
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
   const searchRef = useRef(null);
+  const inputRef = useRef(null);
+  const { items: catalog } = useCatalog();
 
-  const matches = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    if (!q) return [];
-    return PRODUCTS.filter((p) => p.name.toLowerCase().includes(q)).slice(0, 5);
-  }, [query]);
+  // Recompute when the catalogue arrives so results include the full list.
+  const matches = useMemo(() => searchProducts(query, 6), [query, catalog]);
 
   useEffect(() => {
     function onClickOutside(e) {
       if (searchRef.current && !searchRef.current.contains(e.target)) setResultsOpen(false);
     }
     function onKey(e) {
-      if (e.key === 'Escape') setResultsOpen(false);
+      if (e.key === 'Escape') {
+        setResultsOpen(false);
+        setMobileSearchOpen(false);
+      }
     }
     document.addEventListener('mousedown', onClickOutside);
     document.addEventListener('keydown', onKey);
@@ -60,12 +65,29 @@ export default function Header() {
     };
   }, []);
 
+  // Close the mobile search panel on navigation.
+  useEffect(() => {
+    setMobileSearchOpen(false);
+    setResultsOpen(false);
+  }, [location.pathname, location.search]);
+
+  useEffect(() => {
+    if (mobileSearchOpen) inputRef.current?.focus();
+  }, [mobileSearchOpen]);
+
   function onSearch(e) {
     e.preventDefault();
     if (query.trim()) {
       setResultsOpen(false);
+      setMobileSearchOpen(false);
       navigate('/category/pc?q=' + encodeURIComponent(query.trim()));
     }
+  }
+
+  function closeAll() {
+    setResultsOpen(false);
+    setMobileSearchOpen(false);
+    setQuery('');
   }
 
   return (
@@ -83,16 +105,37 @@ export default function Header() {
             <span className="logo__name">Outcast G Store</span>
           </Link>
 
-          <form className="search-form" onSubmit={onSearch} ref={searchRef}>
+          <button
+            type="button"
+            className="search-toggle neu-tap"
+            aria-label={mobileSearchOpen ? 'Close search' : 'Open search'}
+            aria-expanded={mobileSearchOpen}
+            onClick={() => {
+              loadCatalog();
+              setMobileSearchOpen((o) => !o);
+            }}
+          >
+            {mobileSearchOpen ? (
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round"><path d="M6 6l12 12M18 6 6 18" /></svg>
+            ) : (
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.3"><circle cx="11" cy="11" r="7" /><path d="m21 21-4.3-4.3" /></svg>
+            )}
+          </button>
+
+          <form className={`search-form ${mobileSearchOpen ? 'is-open' : ''}`} onSubmit={onSearch} ref={searchRef}>
             <input
+              ref={inputRef}
               type="search"
-              placeholder="Search by title..."
+              placeholder="Search thousands of games..."
               value={query}
               onChange={(e) => {
                 setQuery(e.target.value);
                 setResultsOpen(true);
               }}
-              onFocus={() => setResultsOpen(true)}
+              onFocus={() => {
+                loadCatalog();
+                setResultsOpen(true);
+              }}
               aria-label="Search entire store here"
             />
             <button type="submit" aria-label="Search">
@@ -100,6 +143,9 @@ export default function Header() {
                 <circle cx="11" cy="11" r="7" />
                 <path d="m21 21-4.3-4.3" />
               </svg>
+            </button>
+            <button type="button" className="search-close" aria-label="Close search" onClick={closeAll}>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round"><path d="M6 6l12 12M18 6 6 18" /></svg>
             </button>
 
             <AnimatePresence>
@@ -115,14 +161,7 @@ export default function Header() {
                     <div className="search-empty">No games match “{query}”.</div>
                   ) : (
                     matches.map((p) => (
-                      <Link
-                        to={`/product/${p.id}`}
-                        key={p.id}
-                        onClick={() => {
-                          setResultsOpen(false);
-                          setQuery('');
-                        }}
-                      >
+                      <Link to={`/product/${p.id}`} key={p.id} onClick={closeAll}>
                         <span
                           className="search-results__thumb"
                           style={
@@ -136,7 +175,7 @@ export default function Header() {
                       </Link>
                     ))
                   )}
-                  <Link to={`/category/pc?q=${encodeURIComponent(query.trim())}`} className="search-results__viewall" onClick={() => setResultsOpen(false)}>
+                  <Link to={`/category/pc?q=${encodeURIComponent(query.trim())}`} className="search-results__viewall" onClick={closeAll}>
                     View all results for “{query}”
                   </Link>
                 </motion.div>

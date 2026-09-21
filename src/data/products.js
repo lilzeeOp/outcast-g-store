@@ -97,7 +97,7 @@ export const PRODUCTS = [
 ];
 
 export const CATEGORIES = [
-  { key: 'pc', label: 'PC Games', color: '#ff2d55', tint: '#fff1f3' },
+  { key: 'pc', label: 'PC Games', color: '#0fa7fa', tint: '#eaf6ff' },
   { key: 'consoles', label: 'Consoles & Memberships', color: '#6c5ce7', tint: '#f1eefe' },
   { key: 'gift-cards', label: 'Gift Cards', color: '#f3b93b', tint: '#fff8e8' },
   { key: 'deals', label: 'Deals', color: '#17c3c9', tint: '#e9fbfc' },
@@ -119,8 +119,15 @@ export function formatINR(usd) {
   return '₹' + Math.round(usd * INR_RATE).toLocaleString('en-IN');
 }
 
+// Catalogue products (the big Steam list, loaded lazily by data/catalog.js)
+// register themselves here so findProduct works for `s<appid>` ids too.
+const EXTRA = new Map();
+export function registerCatalog(items) {
+  for (const p of items) EXTRA.set(p.id, p);
+}
+
 export function findProduct(id) {
-  return PRODUCTS.find((p) => p.id === id);
+  return PRODUCTS.find((p) => p.id === id) || EXTRA.get(id);
 }
 
 // Small deterministic hash so "random-looking" mock data (ratings, stock levels)
@@ -134,11 +141,16 @@ export function hash(str) {
 }
 
 export function rating(product) {
-  // Deterministic value in the 3.9–5.0 range.
+  // Real Steam review ratio when we have it (catalogue titles), otherwise a
+  // deterministic value in the 3.9–5.0 range.
+  if (product.reviews && product.reviews.total > 0) {
+    return +(3 + 2 * (product.reviews.positive / product.reviews.total)).toFixed(1);
+  }
   return +(3.9 + (hash(product.id) % 12) / 10).toFixed(1);
 }
 
 export function reviewCount(product) {
+  if (product.reviews && product.reviews.total > 0) return product.reviews.total;
   return 40 + (hash(product.id + 'rc') % 2400);
 }
 
