@@ -81,22 +81,97 @@ export function useCatalog() {
   return { items, ready };
 }
 
-// Simple title search across curated + catalogue products, best matches first.
-export function searchProducts(query, limit = 6) {
-  const q = query.trim().toLowerCase();
-  if (!q) return [];
-  const score = (p) => {
-    const n = p.name.toLowerCase();
-    if (n.startsWith(q)) return 0;
-    const idx = n.indexOf(q);
-    if (idx === -1) return -1;
-    return 1 + idx / 100 + (p.rank || 0) / 100000;
-  };
+// ---------------------------------------------------------------------------
+// Search. Understands the ways people actually type game names:
+//   "gta" / "gta 5" / "gta v"   -> Grand Theft Auto V   (acronyms + numerals)
+//   "cod mw2", "rdr2", "csgo"   -> Call of Duty: Modern Warfare 2, ...
+//   "baldurs gate", "elden"     -> punctuation-insensitive, prefix per word
+// Lower score = better match. -1 = no match.
+// ---------------------------------------------------------------------------
+const ROMAN = { ii: '2', iii: '3', iv: '4', v: '5', vi: '6', vii: '7', viii: '8', ix: '9', x: '10' };
+const SKIP_IN_ACRONYM = new Set(['the', 'edition', 'definitive', 'complete', 'enhanced', 'remastered', 'directors', 'cut', 'goty', 'pc', 'year', 'deluxe', 'ultimate', 'standard', 'bundle', 'pack', 'us']);
+const index = new WeakMap();
+
+function normalize(str) {
+  return str
+    .toLowerCase()
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/['’]/g, '')
+    .replace(/&/g, ' and ')
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim();
+}
+
+function tokenize(str) {
+  return normalize(str)
+    .split(' ')
+    .filter(Boolean)
+    .map((t) => (Object.hasOwn(ROMAN, t) ? ROMAN[t] : t));
+}
+
+function entry(p) {
+  let e = index.get(p);
+  if (!e) {
+    const toks = tokenize(p.name.replace(/ PC$/, ''));
+    const acro = toks
+      .filter((t) => !SKIP_IN_ACRONYM.has(t))
+      .map((t) => (/^\d+$/.test(t) ? t : t[0]))
+      .join('');
+    e = { norm: toks.join(' '), toks, acro };
+    index.set(p, e);
+  }
+  return e;
+}
+
+export function matchScore(p, query) {
+  const qtoks = tokenize(query);
+  if (qtoks.length === 0) return -1;
+  const qn = qtoks.join(' ');
+  const compact = qtoks.join('');
+  const e = entry(p);
+  if (e.norm === qn) return 0;
+  // Short queries are usually abbreviations ("cod", "gta", "ds3"): let the
+  // acronym win over titles that merely start with those letters ("Code Vein").
+  const short = compact.length <= 4;
+  if (compact.length >= 2 && e.acro === compact) return 0.1;
+  if (compact.length >= 3 && e.acro.startsWith(compact)) return short ? 0.1 : 0.6;
+  if (e.norm.startsWith(qn + ' ') || e.norm.startsWith(qn)) return 0.2;
+  const idx = e.norm.indexOf(qn);
+  if (idx !== -1) return 1 + idx / 100;
+  // Every query word is a prefix of some title word (any order).
+  const allPrefix = qtoks.every((qt) => e.toks.some((t) => t.startsWith(qt)));
+  if (allPrefix) return 2;
+  // Acronym plus a trailing word/number, e.g. "gta online", "cod 4".
+  if (qtoks.length >= 2 && compact.length >= 3) {
+    const head = qtoks[0];
+    const rest = qtoks.slice(1);
+    if (e.acro.startsWith(head) && rest.every((qt) => e.toks.some((t) => t.startsWith(qt)))) return 2.5;
+  }
+  return -1;
+}
+
+export function matchesQuery(p, query) {
+  return matchScore(p, query) >= 0;
+}
+
+// Ranked search across curated + catalogue products, best matches first.
+export function searchProducts(query, limit = 8) {
+  if (!query.trim()) return [];
   const out = [];
   for (const p of [...PRODUCTS, ...ITEMS]) {
-    const sc = score(p);
+    const sc = matchScore(p, query);
     if (sc >= 0) out.push([sc, p]);
   }
-  out.sort((a, b) => a[0] - b[0]);
+  out.sort((a, b) => a[0] - b[0] || (a[1].rank ?? -1) - (b[1].rank ?? -1));
   return out.slice(0, limit).map((x) => x[1]);
+}
+
+// Filter + order a list by query relevance (ties broken by popularity).
+export function rankByQuery(list, query) {
+  return list
+    .map((p) => [matchScore(p, query), p])
+    .filter((x) => x[0] >= 0)
+    .sort((a, b) => a[0] - b[0] || (a[1].rank ?? -1) - (b[1].rank ?? -1))
+    .map((x) => x[1]);
 }

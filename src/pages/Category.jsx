@@ -3,7 +3,7 @@ import { Link, useParams, useSearchParams } from 'react-router-dom';
 import ProductCard from '../components/ProductCard';
 import SkeletonCard from '../components/SkeletonCard';
 import { CATEGORIES, PRODUCTS } from '../data/products';
-import { useCatalog } from '../data/catalog';
+import { rankByQuery, useCatalog } from '../data/catalog';
 import useDocumentTitle from '../hooks/useDocumentTitle';
 
 const PLATFORM_FILTERS = [
@@ -33,11 +33,11 @@ export default function Category() {
     if (key && key !== 'deals') list = list.filter((p) => p.category === key);
     // Deals = the 96 biggest rupee savings across the whole catalogue.
     if (key === 'deals') list = [...list].filter((p) => p.was > p.now).sort((a, b) => b.was - b.now - (a.was - a.now)).slice(0, 96);
-    if (q) list = list.filter((p) => p.name.toLowerCase().includes(q));
+    if (q) list = rankByQuery(list, q);
     if (platformFilter.length) list = list.filter((p) => platformFilter.includes(p.platform));
 
     list = [...list];
-    if (sort === 'popular' && key !== 'deals') list.sort((a, b) => (a.rank ?? -1) - (b.rank ?? -1));
+    if (sort === 'popular' && key !== 'deals' && !q) list.sort((a, b) => (a.rank ?? -1) - (b.rank ?? -1));
     if (sort === 'price-asc') list.sort((a, b) => a.now - b.now);
     if (sort === 'price-desc') list.sort((a, b) => b.now - a.now);
     if (sort === 'discount') list.sort((a, b) => b.was - b.now - (a.was - a.now));

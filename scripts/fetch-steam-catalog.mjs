@@ -28,7 +28,7 @@ for (let page = 0; page < PAGES; page++) {
     const list = Number(g.initialprice || 0);
     if (!g.appid || !g.name || list <= 0 || seen.has(g.appid)) continue;
     seen.add(g.appid);
-    rows.push([g.appid, g.name, list, Number(g.positive || 0), Number(g.negative || 0)]);
+    rows.push([g.appid, String(g.name).replace(/�/g, '-'), list, Number(g.positive || 0), Number(g.negative || 0)]);
     kept++;
   }
   console.log(`page ${page}: ${Object.keys(data).length} rows, kept ${kept}, total ${rows.length}`);

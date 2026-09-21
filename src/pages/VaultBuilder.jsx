@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { BUNDLES, findBundle } from '../data/bundles';
 import { PRODUCTS, findProduct, formatINR } from '../data/products';
-import { useCatalog } from '../data/catalog';
+import { rankByQuery, useCatalog } from '../data/catalog';
 import { decodePicks, encodePicks, useVault } from '../context/VaultContext';
 import VaultTray from '../components/VaultTray';
 import ContactModal from '../components/ContactModal';
@@ -45,10 +45,9 @@ export default function VaultBuilder() {
   );
 
   const list = useMemo(() => {
-    const needle = q.trim().toLowerCase();
-    let out = needle ? pool.filter((p) => p.name.toLowerCase().includes(needle)) : pool;
-    out = [...out];
-    if (sort === 'popular') out.sort((a, b) => (a.rank ?? -1) - (b.rank ?? -1));
+    const needle = q.trim();
+    let out = needle ? rankByQuery(pool, needle) : [...pool];
+    if (sort === 'popular' && !needle) out.sort((a, b) => (a.rank ?? -1) - (b.rank ?? -1));
     if (sort === 'name') out.sort((a, b) => a.name.localeCompare(b.name));
     if (sort === 'price-asc') out.sort((a, b) => a.now - b.now);
     if (sort === 'price-desc') out.sort((a, b) => b.now - a.now);

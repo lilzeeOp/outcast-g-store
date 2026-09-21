@@ -45,7 +45,7 @@ export default function Header() {
   const { items: catalog } = useCatalog();
 
   // Recompute when the catalogue arrives so results include the full list.
-  const matches = useMemo(() => searchProducts(query, 6), [query, catalog]);
+  const matches = useMemo(() => searchProducts(query, 8), [query, catalog]);
 
   useEffect(() => {
     function onClickOutside(e) {
