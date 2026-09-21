@@ -187,7 +187,6 @@ export default function VaultBuilder() {
         title={`Order your ${bundle.name}`}
         message={message}
         copyText={copyText}
-        tg={`v_${bundle.id}_${picks.length}`}
       />
     </div>
   );

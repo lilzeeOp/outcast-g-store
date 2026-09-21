@@ -240,7 +240,6 @@ export default function Product() {
         onClose={() => setContact(null)}
         title={contact?.title}
         message={contact?.message}
-        tg={`p_${product.id}`}
       />
     </div>
   );

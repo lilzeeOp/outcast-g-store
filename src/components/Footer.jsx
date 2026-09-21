@@ -56,7 +56,7 @@ export default function Footer() {
               </span>
             </div>
             <div className="footer-social">
-              <a href={telegramLink()} target="_blank" rel="noopener noreferrer" aria-label="Telegram">
+              <a href={telegramLink('Hi! I have a question about Outcast G Store.')} target="_blank" rel="noopener noreferrer" aria-label="Telegram">
                 <svg viewBox="0 0 24 24" fill="currentColor">
                   <path d="M21.9 3.5 2.6 11.2c-1.3.5-1.3 1.2-.2 1.6l4.9 1.5 1.9 5.8c.2.6.4.9.9.9.4 0 .6-.2.9-.5l2.2-2.1 4.6 3.4c.8.5 1.4.2 1.6-.8l3-14c.3-1.3-.4-1.9-1.5-1.5ZM8.4 13.6l9.5-6c.5-.3.9-.1.6.2l-8 7.3-.3 3.3-1.5-4Z" />
                 </svg>
@@ -89,7 +89,7 @@ export default function Footer() {
                 <Link to="/faq">Help Center</Link>
               </li>
               <li>
-                <a href={telegramLink()} target="_blank" rel="noopener noreferrer">Contact on Telegram</a>
+                <a href={telegramLink('Hi! I need help with an order.')} target="_blank" rel="noopener noreferrer">Contact on Telegram</a>
               </li>
               <li>
                 <a href={whatsappLink('Hi! I need help with an order.')} target="_blank" rel="noopener noreferrer">Contact on WhatsApp</a>
