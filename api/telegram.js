@@ -131,6 +131,8 @@ export default async function handler(req, res) {
 
   try {
     if (start) {
+      // Visible in `vercel logs`; used once to learn the owner's chat id.
+      console.log('start', JSON.stringify({ chat: msg.chat.id, user: msg.from?.username, name: msg.from?.first_name, payload: start[1] || null }));
       const { welcome, lead, image } = await compose(start[1], msg.from);
       if (image) {
         await tg('sendPhoto', { chat_id: msg.chat.id, photo: image, caption: welcome, parse_mode: 'HTML' });
