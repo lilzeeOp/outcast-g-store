@@ -853,7 +853,9 @@ main{flex:1}
   .spotlight__thumb{width:68px;height:68px;border-radius:11px}
   .spotlight__nav{display:none}
   .spotlight__copy{padding:150px 22px 26px;max-width:none}
-  .spotlight__title{font-size:28px}
+  .spotlight__title{font-size:28px;min-height:calc(2 * 1.08em)}
+  .spotlight__blurb{min-height:calc(2 * 1.55em)}
+  .spotlight{min-height:540px}
   .spotlight__actions{gap:8px}
   .spotlight__actions .btn{padding:0 16px}
   .logo{gap:7px;font-size:16px}

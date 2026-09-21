@@ -23,10 +23,16 @@ export default function SpotlightHero() {
     return () => clearTimeout(t);
   }, [index, paused, slides.length]);
 
-  // Keep the active thumbnail in view and warm the next slide's art.
+  // Keep the active thumbnail in view by scrolling the strip itself
+  // horizontally. Never scrollIntoView here: that also scrolls the window
+  // vertically and yanked the page back up to the hero on every rotation.
   useEffect(() => {
-    const el = stripRef.current?.children[index];
-    el?.scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: 'smooth' });
+    const strip = stripRef.current;
+    const el = strip?.children[index];
+    if (strip && el) {
+      const left = el.offsetLeft - (strip.clientWidth - el.offsetWidth) / 2;
+      strip.scrollTo({ left: Math.max(0, left), behavior: 'smooth' });
+    }
     const next = slides[(index + 1) % slides.length];
     const img = new Image();
     img.src = `/brand/hero/${next.id}-hero.jpg`;
@@ -89,52 +95,51 @@ export default function SpotlightHero() {
         </div>
       </div>
 
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={active.id}
-          className="spotlight__copy"
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -6 }}
-          transition={{ duration: 0.3 }}
-        >
-          <div className="spotlight__badges">
-            <span className="spotlight__badge spotlight__badge--sale">
-              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm1 5v5.6l3.5 2.1-.8 1.3L11 13V7h2Z" /></svg>
-              Sale {countdown && <b>{countdown}</b>}
-            </span>
-            <span className="spotlight__badge">
-              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m12 2 2.9 6 6.6.6-5 4.4 1.5 6.5L12 16l-5.9 3.5L7.6 13l-5-4.4 6.6-.6Z" /></svg>
-              AAA Title
-            </span>
+      {/* No exit animation on the copy: an unmount-then-mount briefly collapses
+          the hero's height on phones and makes the page jump. */}
+      <motion.div
+        key={active.id}
+        className="spotlight__copy"
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3 }}
+      >
+        <div className="spotlight__badges">
+          <span className="spotlight__badge spotlight__badge--sale">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm1 5v5.6l3.5 2.1-.8 1.3L11 13V7h2Z" /></svg>
+            Sale {countdown && <b>{countdown}</b>}
+          </span>
+          <span className="spotlight__badge">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m12 2 2.9 6 6.6.6-5 4.4 1.5 6.5L12 16l-5.9 3.5L7.6 13l-5-4.4 6.6-.6Z" /></svg>
+            AAA Title
+          </span>
+        </div>
+        <h1 className="spotlight__title">{title}</h1>
+        <p className="spotlight__blurb">{active.blurb}</p>
+        <div className="spotlight__price">
+          <div className="spotlight__price-top">
+            <span className="price-was">{formatINR(p.was)}</span>
+            <span className="badge-off badge-off--inline">-{off}%</span>
           </div>
-          <h1 className="spotlight__title">{title}</h1>
-          <p className="spotlight__blurb">{active.blurb}</p>
-          <div className="spotlight__price">
-            <div className="spotlight__price-top">
-              <span className="price-was">{formatINR(p.was)}</span>
-              <span className="badge-off badge-off--inline">-{off}%</span>
-            </div>
-            <span className="price-now">{formatINR(p.now)}</span>
-          </div>
-          <div className="spotlight__actions">
-            <Link to={`/product/${p.id}`} className="btn btn-primary">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M3 4h2l2.4 11.2a2 2 0 0 0 2 1.6h7.6a2 2 0 0 0 2-1.5L21 8H6" /><circle cx="10" cy="20" r="1" /><circle cx="17" cy="20" r="1" /></svg>
-              Buy Now
-            </Link>
-            <Link to={`/product/${p.id}`} className="btn btn-ghost">Details</Link>
-            <button
-              type="button"
-              className={`spotlight__heart ${saved[p.id] ? 'is-on' : ''}`}
-              aria-pressed={!!saved[p.id]}
-              aria-label={saved[p.id] ? 'Remove from wishlist' : 'Add to wishlist'}
-              onClick={() => setSaved((s) => ({ ...s, [p.id]: !s[p.id] }))}
-            >
-              <svg viewBox="0 0 24 24" fill={saved[p.id] ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2" strokeLinejoin="round"><path d="M12 21s-7.5-4.6-9.5-9.3C1.2 8.6 3.3 5 6.8 5c2 0 3.4 1.1 4.2 2.3C11.8 6.1 13.2 5 15.2 5c3.5 0 5.6 3.6 4.3 6.7C19.5 16.4 12 21 12 21Z" /></svg>
-            </button>
-          </div>
-        </motion.div>
-      </AnimatePresence>
+          <span className="price-now">{formatINR(p.now)}</span>
+        </div>
+        <div className="spotlight__actions">
+          <Link to={`/product/${p.id}`} className="btn btn-primary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M3 4h2l2.4 11.2a2 2 0 0 0 2 1.6h7.6a2 2 0 0 0 2-1.5L21 8H6" /><circle cx="10" cy="20" r="1" /><circle cx="17" cy="20" r="1" /></svg>
+            Buy Now
+          </Link>
+          <Link to={`/product/${p.id}`} className="btn btn-ghost">Details</Link>
+          <button
+            type="button"
+            className={`spotlight__heart ${saved[p.id] ? 'is-on' : ''}`}
+            aria-pressed={!!saved[p.id]}
+            aria-label={saved[p.id] ? 'Remove from wishlist' : 'Add to wishlist'}
+            onClick={() => setSaved((s) => ({ ...s, [p.id]: !s[p.id] }))}
+          >
+            <svg viewBox="0 0 24 24" fill={saved[p.id] ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2" strokeLinejoin="round"><path d="M12 21s-7.5-4.6-9.5-9.3C1.2 8.6 3.3 5 6.8 5c2 0 3.4 1.1 4.2 2.3C11.8 6.1 13.2 5 15.2 5c3.5 0 5.6 3.6 4.3 6.7C19.5 16.4 12 21 12 21Z" /></svg>
+          </button>
+        </div>
+      </motion.div>
     </section>
   );
 }
