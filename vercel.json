@@ -1,3 +1,11 @@
 {
-  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+  "rewrites": [
+    { "source": "/category/:key", "destination": "/index.html" },
+    { "source": "/product/:id", "destination": "/index.html" },
+    { "source": "/bundles", "destination": "/index.html" },
+    { "source": "/bundles/build/:tier", "destination": "/index.html" },
+    { "source": "/faq", "destination": "/index.html" },
+    { "source": "/about-us", "destination": "/index.html" },
+    { "source": "/legal", "destination": "/index.html" }
+  ]
 }

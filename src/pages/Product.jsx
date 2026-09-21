@@ -5,7 +5,7 @@ import PlatformIcon from '../components/PlatformIcon';
 import OSIcon from '../components/OSIcon';
 import RecentlyViewedRail from '../components/RecentlyViewedRail';
 import ContactModal from '../components/ContactModal';
-import { discountPct, findProduct, formatINR, rating, reviewCount, stockLeft, PRODUCTS } from '../data/products';
+import { discountPct, findProduct, formatINR, rating, reviewCount, PRODUCTS } from '../data/products';
 import { useRecentlyViewed } from '../context/RecentlyViewedContext';
 import useDocumentTitle from '../hooks/useDocumentTitle';
 import { useCatalog } from '../data/catalog';
@@ -56,7 +56,7 @@ export default function Product() {
   }
 
   const off = discountPct(product);
-  const stock = stockLeft(product);
+  const stars = rating(product);
   const related = PRODUCTS.filter((p) => p.category === product.category && p.id !== product.id).slice(0, 5);
   const jsonLd = {
     '@context': 'https://schema.org/',
@@ -68,11 +68,9 @@ export default function Product() {
       priceCurrency: 'INR',
       availability: 'https://schema.org/InStock',
     },
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: rating(product),
-      reviewCount: reviewCount(product),
-    },
+    ...(stars
+      ? { aggregateRating: { '@type': 'AggregateRating', ratingValue: stars, reviewCount: reviewCount(product) } }
+      : {}),
   };
 
   return (
@@ -105,14 +103,18 @@ export default function Product() {
             <strong>{product.platform[0].toUpperCase() + product.platform.slice(1)}</strong>
             <span>·</span>
             <span>Instant Delivery</span>
-            <span>·</span>
-            <span className="trust-stars" style={{ color: 'var(--gold)' }}>
-              {'★'.repeat(Math.round(rating(product)))}
-              {'☆'.repeat(5 - Math.round(rating(product)))}
-            </span>
-            <span style={{ color: 'var(--ink-faint)', fontSize: 12.5 }}>
-              {rating(product)} ({reviewCount(product)})
-            </span>
+            {stars && (
+              <>
+                <span>·</span>
+                <span className="trust-stars" style={{ color: 'var(--gold)' }}>
+                  {'★'.repeat(Math.round(stars))}
+                  {'☆'.repeat(5 - Math.round(stars))}
+                </span>
+                <span style={{ color: 'var(--ink-faint)', fontSize: 12.5 }}>
+                  {stars} ({reviewCount(product).toLocaleString('en-IN')} Steam reviews)
+                </span>
+              </>
+            )}
             {product.os && product.os.length > 0 && (
               <>
                 <span>·</span>
@@ -131,9 +133,7 @@ export default function Product() {
               <span className="price-now">{formatINR(product.now)}</span>
             </div>
             {off > 0 && <div className="pdp__save">You save {formatINR(product.was - product.now)} ({off}%)</div>}
-            <span className={`stock-note ${stock <= 5 ? 'stock-note--low' : ''}`}>
-              {stock <= 5 ? `Only ${stock} left in stock` : 'In stock — ready to deliver'}
-            </span>
+            <span className="stock-note">In stock — ready to deliver</span>
             <div className="pdp__actions" style={{ marginTop: 14 }}>
               <button
                 className="btn btn-primary"

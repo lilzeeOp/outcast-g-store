@@ -172,10 +172,11 @@ p{margin:0}
 .mobile-nav{
   position:fixed;top:0;left:0;bottom:0;width:320px;max-width:88vw;
   background:var(--neu-bg);z-index:96;color:#fff;
-  transform:translateX(-100%);transition:transform .25s cubic-bezier(.4,0,.2,1);
+  transform:translateX(-100%);visibility:hidden;pointer-events:none;
+  transition:transform .25s cubic-bezier(.4,0,.2,1),visibility 0s linear .25s;
   display:flex;flex-direction:column;
 }
-.mobile-nav.is-open{transform:translateX(0)}
+.mobile-nav.is-open{transform:translateX(0);visibility:visible;pointer-events:auto;transition:transform .25s cubic-bezier(.4,0,.2,1),visibility 0s}
 .mobile-nav__head{display:flex;align-items:center;justify-content:space-between;padding:18px 20px;border-bottom:1px solid rgba(255,255,255,.06)}
 .mobile-nav__body{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:8px}
 .mobile-nav__item{}
@@ -980,3 +981,11 @@ main{flex:1}
   .vb__tier{flex:1;min-width:0}
   .vb__head h1{font-size:24px}
 }
+
+/* Tap-target sizing for small text links (44px-ish hit areas without layout shift) */
+.breadcrumb a{display:inline-block;padding:8px 2px;margin:-8px -2px}
+.bundle-card__alt,.bundle-hero__alt{min-height:40px;padding:8px 0}
+.filter-opt input{width:18px;height:18px}
+footer li a{display:inline-block;padding-block:7px}
+footer p a{display:inline-block;padding-block:6px}
+.product-card__giftcard{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-family:var(--font-mono);font-weight:700;font-size:26px;letter-spacing:-.02em;text-shadow:0 4px 14px rgba(0,0,0,.5)}

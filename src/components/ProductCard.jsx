@@ -4,13 +4,11 @@ import { motion } from 'framer-motion';
 import PlatformIcon from './PlatformIcon';
 import OSIcon from './OSIcon';
 import ContactModal from './ContactModal';
-import { discountPct, formatINR, rating, reviewCount, stockLeft } from '../data/products';
-import useDealCountdown from '../hooks/useDealCountdown';
+import { discountPct, formatINR, rating, reviewCount } from '../data/products';
 
 export default function ProductCard({ product }) {
   const off = discountPct(product);
-  const stock = stockLeft(product);
-  const countdown = useDealCountdown(product.id);
+  const stars = rating(product);
   const [contactOpen, setContactOpen] = useState(false);
 
   return (
@@ -26,6 +24,7 @@ export default function ProductCard({ product }) {
         aria-label={product.name}
       >
         {product.image && <img className="product-card__cover-img" src={product.image} alt="" loading="lazy" />}
+        {product.kind === 'giftcard' && <span className="product-card__giftcard">{product.name.match(/\$\d+/)?.[0]}</span>}
         <span className="product-card__scrim" aria-hidden="true" />
         <span className="platform-chip">
           <PlatformIcon platform={product.platform} />
@@ -37,14 +36,16 @@ export default function ProductCard({ product }) {
         <Link to={`/product/${product.id}`} className="product-card__name">
           {product.name}
         </Link>
-        <div className="product-card__rating">
-          <span className="stars" aria-hidden="true">
-            {'★'.repeat(Math.round(rating(product))) + '☆'.repeat(5 - Math.round(rating(product)))}
-          </span>
-          <span className="product-card__rating-count">
-            {rating(product)} ({reviewCount(product)})
-          </span>
-        </div>
+        {stars && (
+          <div className="product-card__rating">
+            <span className="stars" aria-hidden="true">
+              {'★'.repeat(Math.round(stars)) + '☆'.repeat(5 - Math.round(stars))}
+            </span>
+            <span className="product-card__rating-count">
+              {stars} ({reviewCount(product).toLocaleString('en-IN')})
+            </span>
+          </div>
+        )}
         {off > 0 && (
           <div className="product-card__deal">
             <span className="price-was">{formatINR(product.was)}</span>
@@ -61,10 +62,7 @@ export default function ProductCard({ product }) {
             </span>
           )}
         </div>
-        <span className={`stock-note ${stock <= 5 ? 'stock-note--low' : ''}`}>
-          {stock <= 5 ? `Only ${stock} left` : 'In stock'}
-        </span>
-        {off > 0 && countdown && <span className="deal-countdown">Deal ends in {countdown}</span>}
+        <span className="stock-note">In stock</span>
         <motion.button
           className="product-card__cta"
           whileTap={{ scale: 0.96 }}

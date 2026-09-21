@@ -5,7 +5,7 @@ import PlatformIcon from '../components/PlatformIcon';
 import BundleHero from '../components/BundleHero';
 import SpotlightHero from '../components/SpotlightHero';
 import RecentlyViewedRail from '../components/RecentlyViewedRail';
-import { CATEGORIES, PRODUCTS } from '../data/products';
+import { CATEGORIES, PRODUCTS, rating } from '../data/products';
 import useDocumentTitle from '../hooks/useDocumentTitle';
 
 const CAT_ICONS = {
@@ -99,6 +99,8 @@ function ProductRow({ eyebrow, title, viewAllTo, items }) {
 }
 
 function TrustBar() {
+  const rated = PRODUCTS.map(rating).filter(Boolean);
+  const avgRating = (rated.reduce((a, b) => a + b, 0) / rated.length).toFixed(1);
   const items = [
     {
       title: 'Instant Delivery',
@@ -113,7 +115,7 @@ function TrustBar() {
       title: 'Verified Reviews',
       desc: (
         <>
-          <span className="trust-stars">★★★★★</span> 4.6 average from players
+          <span className="trust-stars">★★★★★</span> {avgRating} average on Steam
         </>
       ),
       icon: (

@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { SPOTLIGHT } from '../data/spotlight';
 import { discountPct, findProduct, formatINR } from '../data/products';
-import useDealCountdown from '../hooks/useDealCountdown';
 
 const ROTATE_MS = 8000;
+const WISHLIST_KEY = 'outcast_wishlist_v1';
 
 // Spotlight hero — one card in the bundle-hero style: a strip of game cover
 // thumbnails across the top (active one outlined), the selected game's key art
@@ -14,7 +14,21 @@ export default function SpotlightHero() {
   const slides = SPOTLIGHT.map((s) => ({ ...s, product: findProduct(s.id) })).filter((s) => s.product);
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
-  const [saved, setSaved] = useState({});
+  // Wishlist hearts persist per browser.
+  const [saved, setSaved] = useState(() => {
+    try {
+      return JSON.parse(localStorage.getItem(WISHLIST_KEY)) || {};
+    } catch {
+      return {};
+    }
+  });
+  useEffect(() => {
+    try {
+      localStorage.setItem(WISHLIST_KEY, JSON.stringify(saved));
+    } catch {
+      /* storage unavailable */
+    }
+  }, [saved]);
   const stripRef = useRef(null);
 
   useEffect(() => {
@@ -43,7 +57,6 @@ export default function SpotlightHero() {
   const active = slides[index];
   const p = active.product;
   const off = discountPct(p);
-  const countdown = useDealCountdown(p.id);
   const title = p.name.replace(/ PC$/, '');
 
   return (
@@ -107,7 +120,7 @@ export default function SpotlightHero() {
         <div className="spotlight__badges">
           <span className="spotlight__badge spotlight__badge--sale">
             <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm1 5v5.6l3.5 2.1-.8 1.3L11 13V7h2Z" /></svg>
-            Sale {countdown && <b>{countdown}</b>}
+            Sale <b>-{off}%</b>
           </span>
           <span className="spotlight__badge">
             <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m12 2 2.9 6 6.6.6-5 4.4 1.5 6.5L12 16l-5.9 3.5L7.6 13l-5-4.4 6.6-.6Z" /></svg>
