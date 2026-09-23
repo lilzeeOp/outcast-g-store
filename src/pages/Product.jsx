@@ -210,7 +210,7 @@ export default function Product() {
             <p>
               Get {product.name} delivered straight to your inbox in minutes. This listing is a{' '}
               {product.platform[0].toUpperCase() + product.platform.slice(1)} digital key, redeemable worldwide
-              unless stated otherwise. Message us on Telegram or WhatsApp to confirm availability and complete
+              unless stated otherwise. Message us on Telegram to confirm availability and complete
               your purchase.
             </p>
           </div>

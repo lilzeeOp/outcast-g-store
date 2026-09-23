@@ -32,7 +32,7 @@ export default function Legal() {
         <h2>Your rights</h2>
         <p>
           You can request a copy of your data or ask us to delete your account at any time by contacting support
-          on Telegram or WhatsApp.
+          on Telegram.
         </p>
       </div>
 
@@ -42,7 +42,7 @@ export default function Legal() {
       <div className="content-block">
         <h2>Orders &amp; delivery</h2>
         <p>
-          Purchases are arranged directly with the seller over Telegram or WhatsApp. Digital keys are delivered to
+          Purchases are arranged directly with the seller over Telegram. Digital keys are delivered to
           your email, typically within minutes of payment confirmation.
         </p>
       </div>

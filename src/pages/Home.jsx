@@ -136,7 +136,7 @@ function TrustBar() {
     },
     {
       title: 'Direct Contact',
-      desc: 'Buy over Telegram or WhatsApp',
+      desc: 'Buy over Telegram — WhatsApp coming soon',
       icon: (
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
           <path d="M21 11.5a8.4 8.4 0 0 1-8.9 8.4 8.6 8.6 0 0 1-3-.6L3 21l1.8-5.4A8.4 8.4 0 1 1 21 11.5Z" />

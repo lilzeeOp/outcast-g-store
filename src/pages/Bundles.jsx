@@ -13,7 +13,7 @@ export default function Bundles() {
       <h1>Game Bundle Packs</h1>
       <p className="lede">
         One flat price, a whole vault of keys. Pick a tier, choose the games you want from our full Steam
-        catalogue, and we'll deliver the keys over Telegram or WhatsApp.
+        catalogue, and we'll deliver the keys over Telegram.
       </p>
 
       <div className="bundle-grid">
@@ -27,7 +27,7 @@ export default function Bundles() {
         <p>
           Pick a vault size, then choose the exact Steam titles you want using the vault builder — search our
           catalogue and add games until the vault is full, or top it up with our top sellers in one click.
-          When you continue, your list is sent to us on Telegram or WhatsApp and we confirm stock before you pay.
+          When you continue, your list is sent to us on Telegram and we confirm stock before you pay.
         </p>
       </div>
     </div>

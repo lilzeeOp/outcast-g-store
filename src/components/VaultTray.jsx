@@ -61,7 +61,7 @@ export default function VaultTray({ bundle, picks, onRemove, onClear, onFill, on
       <p className="vault-tray__note">
         {remaining > 0
           ? `Your vault needs all ${max} games before you can order. Use "Fill remaining" to top it up with top sellers.`
-          : `Flat price for the ${bundle.name}. Keys delivered over Telegram or WhatsApp.`}
+          : `Flat price for the ${bundle.name}. Keys delivered over Telegram.`}
       </p>
     </>
   );

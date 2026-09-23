@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { TELEGRAM_USERNAME, WHATSAPP_ENABLED, generalMessage, telegramLink, whatsappLink } from '../lib/contact';
 
 export default function ContactModal({ isOpen, onClose, title, message, copyText }) {
@@ -12,7 +13,9 @@ export default function ContactModal({ isOpen, onClose, title, message, copyText
 
   if (!isOpen) return null;
 
-  return (
+  // Portal to <body>: a transformed ancestor (animated cards) would otherwise
+  // trap the fixed-position modal inside itself.
+  return createPortal(
     <div className="overlay is-open contact-overlay" onClick={onClose}>
       <div
         className="contact-modal"
@@ -105,6 +108,7 @@ export default function ContactModal({ isOpen, onClose, title, message, copyText
 
             <p className="contact-modal__note">Telegram is our official channel. Orders are confirmed and keys delivered there.</p>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
