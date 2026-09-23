@@ -21,7 +21,7 @@ export default function Category() {
   const [platformFilter, setPlatformFilter] = useState([]);
   const [sort, setSort] = useState(searchParams.get('sort') || 'popular');
   const { items: catalog, ready: catalogReady } = useCatalog();
-  const [page, setPage] = useState(1);
+  const [visible, setVisible] = useState(PAGE_SIZE);
 
   const cat = CATEGORIES.find((c) => c.key === key);
   const label = cat ? cat.label : key === 'deals' ? 'Deals' : 'All Games';
@@ -44,17 +44,17 @@ export default function Category() {
     return list;
   }, [key, q, platformFilter, sort, catalog]);
 
-  const pageCount = Math.max(1, Math.ceil(items.length / PAGE_SIZE));
-  const pagedItems = items.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+  const pagedItems = items.slice(0, visible);
+  const remaining = Math.max(0, items.length - visible);
 
   useEffect(() => {
     const s = searchParams.get('sort');
     if (s) setSort(s);
   }, [searchParams]);
 
-  // Reset to page 1 whenever the underlying result set changes.
+  // Reset the visible window whenever the underlying result set changes.
   useEffect(() => {
-    setPage(1);
+    setVisible(PAGE_SIZE);
   }, [key, q, platformFilter, sort]);
 
 
@@ -107,25 +107,15 @@ export default function Category() {
                   : pagedItems.map((p) => <ProductCard product={p} key={p.id} />)}
               </div>
 
-              {pageCount > 1 && (
-                <nav className="pagination" aria-label="Pagination">
-                  <button onClick={() => setPage((p) => Math.max(1, p - 1))} disabled={page === 1} aria-label="Previous page">
-                    ‹
+              {remaining > 0 && (
+                <div className="load-more">
+                  <button type="button" className="btn btn-outline-dark" onClick={() => setVisible((v) => v + PAGE_SIZE)}>
+                    Show {Math.min(PAGE_SIZE, remaining)} more ({remaining.toLocaleString('en-IN')} left)
                   </button>
-                  {Array.from({ length: pageCount }, (_, i) => i + 1).map((n) => (
-                    <button
-                      key={n}
-                      className={n === page ? 'is-active' : ''}
-                      onClick={() => setPage(n)}
-                      aria-current={n === page ? 'page' : undefined}
-                    >
-                      {n}
-                    </button>
-                  ))}
-                  <button onClick={() => setPage((p) => Math.min(pageCount, p + 1))} disabled={page === pageCount} aria-label="Next page">
-                    ›
-                  </button>
-                </nav>
+                  <span className="load-more__meta">
+                    Showing {pagedItems.length.toLocaleString('en-IN')} of {items.length.toLocaleString('en-IN')}
+                  </span>
+                </div>
               )}
             </>
           )}

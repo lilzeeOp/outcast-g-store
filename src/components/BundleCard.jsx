@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import ContactModal from './ContactModal';
 import { bundleMessage } from '../lib/contact';
+import { perGame } from '../data/bundles';
 
 function inr(n) {
   return '₹' + n.toLocaleString('en-IN');
@@ -10,7 +11,6 @@ function inr(n) {
 
 export default function BundleCard({ bundle }) {
   const [contactOpen, setContactOpen] = useState(false);
-  const off = Math.round((1 - bundle.price / bundle.was) * 100);
 
   return (
     <motion.article
@@ -23,7 +23,7 @@ export default function BundleCard({ bundle }) {
       <span className="bundle-card__tag">{bundle.tag}</span>
       <div className="bundle-card__count">
         {bundle.count}
-        <small>+ games</small>
+        <small>Tier {bundle.tier} games</small>
       </div>
       <h3>{bundle.name}</h3>
       <p>{bundle.blurb}</p>
@@ -36,9 +36,8 @@ export default function BundleCard({ bundle }) {
         ))}
       </ul>
       <div className="bundle-card__price">
-        <span className="price-was">{inr(bundle.was)}</span>
         <span className="price-now">{inr(bundle.price)}</span>
-        {off > 0 && <span className="badge-off">{off}% Off</span>}
+        <span className="badge-off">≈ {inr(perGame(bundle))} / game</span>
       </div>
       <Link to={`/bundles/build/${bundle.id}`} className="btn btn-primary" style={{ width: '100%' }}>
         Choose Your Games

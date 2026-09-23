@@ -5,7 +5,7 @@ import PlatformIcon from '../components/PlatformIcon';
 import OSIcon from '../components/OSIcon';
 import RecentlyViewedRail from '../components/RecentlyViewedRail';
 import ContactModal from '../components/ContactModal';
-import { discountPct, findProduct, formatINR, rating, reviewCount, PRODUCTS } from '../data/products';
+import { discountPct, findProduct, formatINR, rating, reviewCount, PRODUCTS, TIERS } from '../data/products';
 import { useRecentlyViewed } from '../context/RecentlyViewedContext';
 import useDocumentTitle from '../hooks/useDocumentTitle';
 import { pairMessage, productMessage } from '../lib/contact';
@@ -132,6 +132,7 @@ export default function Product() {
             <div className="pdp__price-row">
               {off > 0 && <span className="price-was">{formatINR(product.was)}</span>}
               <span className="price-now">{formatINR(product.now)}</span>
+              {product.tier && <span className="tier-pill">Tier {product.tier} · {TIERS[product.tier].name}</span>}
             </div>
             {off > 0 && <div className="pdp__save">You save {formatINR(product.was - product.now)} ({off}%)</div>}
             <span className="stock-note">In stock — ready to deliver</span>

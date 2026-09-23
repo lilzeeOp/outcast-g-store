@@ -25,7 +25,7 @@ Refresh the Steam catalogue (about one minute per 1,000 games because of SteamSp
 node scripts/fetch-steam-catalog.mjs 10
 ```
 
-Every product is listed at a flat 60% off its Steam US list price (see `catalog.js` and the comment in `products.js`).
+Games are priced by tier — Tier 1 ₹1,499, Tier 2 ₹999, Tier 3 ₹499 — assigned from Steam popularity and list price (`tierFor` in `products.js`). Vaults are tied to a tier (`bundles.js`).
 
 ## Contact links
 

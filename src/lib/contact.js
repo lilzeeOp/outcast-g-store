@@ -1,6 +1,8 @@
-// Telegram handle confirmed (@OUTCASTGSTORE). TODO: replace the WhatsApp placeholder before going live.
+// Telegram handle confirmed (@OUTCASTGSTORE).
 export const TELEGRAM_USERNAME = 'outcastgstore';
 export const WHATSAPP_NUMBER = '910000000000'; // country code + number, no symbols
+// WhatsApp isn't live yet: the UI shows it as "coming soon" until this is true.
+export const WHATSAPP_ENABLED = false;
 
 // Opens the store's own Telegram chat with the message pre-typed (Telegram's
 // `text` deep-link parameter). No bot in the middle: buyers talk to the team.
@@ -34,7 +36,7 @@ export function productMessage(product) {
     '',
     "I'd like to buy:",
     `\ud83c\udfae ${title(product)}`,
-    `\ud83d\udcb0 ${now}  (${off}% off, list ${was})`,
+    off > 0 ? `\ud83d\udcb0 ${now}  (${off}% off, list ${was})` : `\ud83d\udcb0 ${now}`,
     `\ud83d\udd17 ${SITE}/product/${product.id}`,
     '',
     CLOSE,
@@ -56,12 +58,11 @@ export function pairMessage(a, b) {
 }
 
 export function bundleMessage(bundle) {
-  const off = Math.round((1 - bundle.price / bundle.was) * 100);
   return [
     GREETING,
     '',
     `I'd like the ${bundle.name} \ud83e\uddf0`,
-    `\ud83c\udfae ${bundle.count}+ Steam keys for a flat ${inr(bundle.price)}  (${off}% off ${inr(bundle.was)})`,
+    `\ud83c\udfae ${bundle.count} Tier ${bundle.tier} Steam keys for a flat ${inr(bundle.price)}`,
     `\ud83d\udd17 ${SITE}/bundles`,
     '',
     "I'm happy for you to pick the games. " + CLOSE,
@@ -75,7 +76,7 @@ export function vaultMessage(bundle, titles, shareUrl, cap = 40) {
     GREETING,
     '',
     `I'd like to order the ${bundle.name} \ud83e\uddf0`,
-    `\ud83c\udfae ${bundle.count} Steam keys for a flat ${inr(bundle.price)}`,
+    `\ud83c\udfae ${bundle.count} Tier ${bundle.tier} Steam keys for a flat ${inr(bundle.price)}`,
     '',
     `My picks (${titles.length}):`,
     ...listed,

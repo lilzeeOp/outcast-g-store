@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { TELEGRAM_USERNAME, generalMessage, telegramLink, whatsappLink } from '../lib/contact';
+import { TELEGRAM_USERNAME, WHATSAPP_ENABLED, generalMessage, telegramLink, whatsappLink } from '../lib/contact';
 
 export default function ContactModal({ isOpen, onClose, title, message, copyText }) {
   const [copied, setCopied] = useState(false);
@@ -47,6 +47,7 @@ export default function ContactModal({ isOpen, onClose, title, message, copyText
                 </span>
               </a>
 
+              {WHATSAPP_ENABLED ? (
               <a
                 className="contact-option contact-option--whatsapp"
                 href={whatsappLink(message || generalMessage())}
@@ -63,6 +64,19 @@ export default function ContactModal({ isOpen, onClose, title, message, copyText
                   <small>Fastest response</small>
                 </span>
               </a>
+              ) : (
+              <div className="contact-option contact-option--whatsapp contact-option--disabled" aria-disabled="true">
+                <span className="contact-option__icon">
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2Zm0 18a8 8 0 0 1-4.1-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8 8 0 1 1 12 20Zm4.4-6c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1-.2.2-.7.8-.8.9-.1.2-.3.2-.5.1-1.5-.7-2.5-1.3-3.5-3-.3-.5.3-.5.8-1.6.1-.2 0-.4 0-.5-.1-.1-.6-1.4-.8-1.9-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.2.2-1 1-1 2.4s1 2.8 1.1 3c.1.2 2 3 4.8 4.2.7.3 1.2.5 1.6.6.7.2 1.3.2 1.8.1.5-.1 1.5-.6 1.8-1.2.2-.6.2-1.1.2-1.2 0-.1-.2-.2-.4-.3Z" />
+                  </svg>
+                </span>
+                <span>
+                  <strong>WhatsApp</strong>
+                  <small>Coming soon — use Telegram for now</small>
+                </span>
+              </div>
+              )}
             </div>
 
             {copyText && (
@@ -89,7 +103,7 @@ export default function ContactModal({ isOpen, onClose, title, message, copyText
               </span>
             </a>
 
-            <p className="contact-modal__note">Telegram is live. The WhatsApp number is a placeholder until the real one is added.</p>
+            <p className="contact-modal__note">Telegram is our official channel. Orders are confirmed and keys delivered there.</p>
       </div>
     </div>
   );

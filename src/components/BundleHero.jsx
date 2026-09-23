@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { BUNDLES } from '../data/bundles';
+import { BUNDLES, perGame } from '../data/bundles';
 import ContactModal from './ContactModal';
 import { bundleMessage } from '../lib/contact';
 
@@ -27,7 +27,6 @@ export default function BundleHero() {
   const [tierIndex, setTierIndex] = useState(1);
   const [contactOpen, setContactOpen] = useState(false);
   const bundle = BUNDLES[tierIndex];
-  const off = Math.round((1 - bundle.price / bundle.was) * 100);
 
   return (
     <div className="bundle-hero neu-grain">
@@ -36,7 +35,7 @@ export default function BundleHero() {
         <h1>Your whole library.
           <br />One price.
         </h1>
-        <p>Flat-priced vaults of genuine PC keys — pick a tier, message us, get delivered over Telegram or WhatsApp.</p>
+        <p>Flat-priced vaults of genuine Steam keys — choose a tier, pick your games, and we deliver over Telegram.</p>
 
         <div className="bundle-hero__tabs" role="tablist" aria-label="Choose a vault tier">
           {BUNDLES.map((b, i) => (
@@ -47,7 +46,7 @@ export default function BundleHero() {
               role="tab"
               aria-selected={i === tierIndex}
             >
-              <span className="bundle-hero__tab-count">{b.count}+</span>
+              <span className="bundle-hero__tab-count">{b.count}</span>
               <span className="bundle-hero__tab-tag">{b.tag}</span>
             </button>
           ))}
@@ -64,15 +63,14 @@ export default function BundleHero() {
           >
             <div className="bundle-hero__count">
               {bundle.count}
-              <small>+ games</small>
+              <small>Tier {bundle.tier} games</small>
             </div>
             <div className="bundle-hero__panel-body">
               <h2>{bundle.name}</h2>
               <p>{bundle.blurb}</p>
               <div className="bundle-hero__price">
-                <span className="price-was">{inr(bundle.was)}</span>
                 <span className="price-now">{inr(bundle.price)}</span>
-                {off > 0 && <span className="badge-off" style={{ position: 'static' }}>{off}% Off</span>}
+                <span className="badge-off" style={{ position: 'static' }}>≈ {inr(perGame(bundle))} / game</span>
               </div>
               <div className="bundle-hero__actions">
                 <Link to={`/bundles/build/${bundle.id}`} className="btn btn-primary">

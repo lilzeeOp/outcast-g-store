@@ -12,7 +12,8 @@
 // `cover` gradient colors remain the fallback for the handful of non-Steam
 // listings (memberships / Xbox) with no public CDN image source.
 // Pricing: `was` is the Steam US list price (store.steampowered.com appdetails,
-// fetched 2026-09-16); `now` is a flat 60% off that list price on every item.
+// fetched 2026-09-16). Games are then priced by TIER (see applyTier below);
+// memberships and gift cards keep their own `now`.
 export const PRODUCTS = [
   { id: 'spiderman', name: "Marvel's Spider-Man Remastered PC", platform: 'steam', category: 'pc', tag: 'Bestseller', was: 59.99, now: 24, cover: ["#3a1a5c","#0f0a24"], image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1817070/header.jpg', os: ["windows"], reviews: { positive: 138082, negative: 5728, total: 143810 } },
   { id: 'clair-obscur', name: "Clair Obscur: Expedition 33 PC", platform: 'steam', category: 'pc', tag: 'Award Winner', was: 49.99, now: 20, cover: ["#7a2b3a","#20101c"], image: 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1903340/be3305b02d4db0dffa3458537118423bf2792d7e/header.jpg', os: ["windows"], reviews: { positive: 265644, negative: 13277, total: 278921 } },
@@ -117,7 +118,43 @@ export const CATEGORIES = [
 ];
 
 export function discountPct(p) {
-  return Math.round((1 - p.now / p.was) * 100);
+  return Math.max(0, Math.round((1 - p.now / p.was) * 100));
+}
+
+// ---------------------------------------------------------------------------
+// Tiered game pricing (INR). Tier 1 = top trending / AAA, Tier 2 = mid,
+// Tier 3 = value. Every Steam game gets one; the tier sets its price.
+// ---------------------------------------------------------------------------
+export const TIERS = {
+  1: { price: 1499, label: 'Tier 1', name: 'Top tier', blurb: 'Trending blockbusters and AAA hits' },
+  2: { price: 999, label: 'Tier 2', name: 'Mid tier', blurb: 'Popular, well-reviewed favourites' },
+  3: { price: 499, label: 'Tier 3', name: 'Value tier', blurb: 'Indies, classics and hidden gems' },
+};
+
+// rank: popularity position in the Steam catalogue (0 = most owned), or null.
+export function tierFor({ listUsd, rank, spotlight, tag }) {
+  if (spotlight) return 1;
+  if (rank != null) {
+    if (rank < 600 && listUsd >= 25) return 1;
+    if (rank < 3000 || listUsd >= 20) return 2;
+    return 3;
+  }
+  const hot = ['Bestseller', 'Trending', 'Award Winner', 'AAA', 'New Release', 'Deluxe'].includes(tag);
+  if (hot && listUsd >= 40) return 1;
+  if (listUsd >= 20) return 2;
+  return 3;
+}
+
+// Sets p.tier and p.now (kept in the same USD-equivalent unit as `was` so
+// formatINR() renders the exact tier price).
+export function applyTier(p, rank = null) {
+  p.tier = tierFor({ listUsd: p.was, rank, spotlight: p.spotlight, tag: p.tag });
+  p.now = TIERS[p.tier].price / INR_RATE;
+  return p;
+}
+
+export function tierPriceINR(tier) {
+  return TIERS[tier]?.price ?? null;
 }
 
 export function money(n) {
@@ -126,7 +163,7 @@ export function money(n) {
 
 // Prices are authored in USD above; this is a static demo conversion rate
 // (not live FX data) so every price on the site reads consistently in INR.
-const INR_RATE = 83;
+export const INR_RATE = 83;
 
 export function formatINR(usd) {
   return '₹' + Math.round(usd * INR_RATE).toLocaleString('en-IN');
@@ -165,3 +202,7 @@ export function reviewCount(product) {
   return product.reviews && product.reviews.total > 0 ? product.reviews.total : null;
 }
 
+// Price every curated Steam game by its tier (memberships / gift cards keep their own prices).
+for (const p of PRODUCTS) {
+  if (p.category === 'pc' && p.platform === 'steam' && p.kind !== 'giftcard') applyTier(p);
+}

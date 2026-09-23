@@ -1,12 +1,11 @@
 import { useEffect, useState } from 'react';
-import { PRODUCTS, hash, registerCatalog } from './products';
+import { INR_RATE, PRODUCTS, TIERS, hash, registerCatalog, tierFor } from './products';
 
 // The big Steam catalogue: top games by ownership, built by
 // scripts/fetch-steam-catalog.mjs into public/data/steam-catalog.json.
 // Loaded lazily (once) because it is a few hundred KB; curated PRODUCTS
 // stay in the main bundle so the home page never waits on it.
 
-const DISCOUNT = 0.6; // flat 60% off list, same as the curated catalogue
 const CDN = 'https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/';
 
 let promise = null;
@@ -21,6 +20,7 @@ function toProduct([appid, name, listCents, positive, negative], rank) {
   const was = listCents / 100;
   const hue = hash(String(appid)) % 360;
   const total = positive + negative;
+  const tier = tierFor({ listUsd: was, rank });
   return {
     id: `s${appid}`,
     steamAppId: appid,
@@ -29,7 +29,8 @@ function toProduct([appid, name, listCents, positive, negative], rank) {
     category: 'pc',
     tag: rank < 300 ? 'Top Seller' : rank < 2000 ? 'Popular' : 'Steam Key',
     was,
-    now: Math.round(was * (1 - DISCOUNT) * 100) / 100,
+    now: TIERS[tier].price / INR_RATE,
+    tier,
     cover: [`hsl(${hue}, 45%, 20%)`, `hsl(${hue}, 45%, 7%)`],
     image: `${CDN}${appid}/header.jpg`,
     os: ['windows'],

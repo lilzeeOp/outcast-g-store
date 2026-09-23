@@ -120,7 +120,7 @@ export default function SpotlightHero() {
         <div className="spotlight__badges">
           <span className="spotlight__badge spotlight__badge--sale">
             <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm1 5v5.6l3.5 2.1-.8 1.3L11 13V7h2Z" /></svg>
-            Sale <b>-{off}%</b>
+            Sale {off > 0 && <b>-{off}%</b>}
           </span>
           <span className="spotlight__badge">
             <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="m12 2 2.9 6 6.6.6-5 4.4 1.5 6.5L12 16l-5.9 3.5L7.6 13l-5-4.4 6.6-.6Z" /></svg>
@@ -131,8 +131,9 @@ export default function SpotlightHero() {
         <p className="spotlight__blurb">{active.blurb}</p>
         <div className="spotlight__price">
           <div className="spotlight__price-top">
-            <span className="price-was">{formatINR(p.was)}</span>
-            <span className="badge-off badge-off--inline">-{off}%</span>
+            {off > 0 && <span className="price-was">{formatINR(p.was)}</span>}
+            {off > 0 && <span className="badge-off badge-off--inline">-{off}%</span>}
+            {p.tier && <span className="tier-pill">Tier {p.tier}</span>}
           </div>
           <span className="price-now">{formatINR(p.now)}</span>
         </div>

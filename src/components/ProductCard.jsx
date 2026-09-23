@@ -55,6 +55,7 @@ export default function ProductCard({ product }) {
         )}
         <div className="product-card__prices">
           <span className="price-now">{formatINR(product.now)}</span>
+          {product.tier && <span className="tier-pill">Tier {product.tier}</span>}
           {product.os && product.os.length > 0 && (
             <span className="os-icons" aria-label={`Runs on ${product.os.join(', ')}`}>
               {product.os.map((os) => (
