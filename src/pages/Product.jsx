@@ -210,7 +210,7 @@ export default function Product() {
             <h3>About this product</h3>
             <p>
               Get {product.name} delivered straight to your inbox in minutes. This listing is a{' '}
-              {product.platform[0].toUpperCase() + product.platform.slice(1)} digital key, redeemable worldwide
+              {product.platform[0].toUpperCase() + product.platform.slice(1)} game, redeemable worldwide
               unless stated otherwise. Message us on Telegram to confirm availability and complete
               your purchase.
             </p>

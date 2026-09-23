@@ -27,7 +27,7 @@ function toProduct([appid, name, listCents, positive, negative], rank) {
     name: `${name} PC`,
     platform: 'steam',
     category: 'pc',
-    tag: rank < 300 ? 'Top Seller' : rank < 2000 ? 'Popular' : 'Steam Key',
+    tag: rank < 300 ? 'Top Seller' : rank < 2000 ? 'Popular' : 'Steam Game',
     was,
     now: TIERS[tier].price / INR_RATE,
     tier,

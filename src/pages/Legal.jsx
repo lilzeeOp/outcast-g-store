@@ -42,7 +42,7 @@ export default function Legal() {
       <div className="content-block">
         <h2>Orders &amp; delivery</h2>
         <p>
-          Purchases are arranged directly with the seller over Telegram. Digital keys are delivered to
+          Purchases are arranged directly with the seller over Telegram. Games are delivered to
           your email, typically within minutes of payment confirmation.
         </p>
       </div>

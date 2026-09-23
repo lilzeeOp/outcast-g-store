@@ -45,7 +45,7 @@ function PlatformTicker() {
         {doubled.map((p, i) => (
           <span className="platform-ticker__item" key={p + i}>
             <PlatformIcon platform={p} />
-            {p === 'steam' ? 'Steam Keys' : p === 'playstation' ? 'PlayStation' : p === 'xbox' ? 'Xbox' : 'Nintendo Switch'}
+            {p === 'steam' ? 'Steam Games' : p === 'playstation' ? 'PlayStation' : p === 'xbox' ? 'Xbox' : 'Nintendo Switch'}
           </span>
         ))}
       </div>
@@ -105,7 +105,7 @@ function TrustBar() {
   const items = [
     {
       title: 'Instant Delivery',
-      desc: 'Keys sent to your inbox in minutes',
+      desc: 'Games delivered in minutes',
       icon: (
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
           <path d="M13 2 3 14h8l-1 8 10-12h-8l1-8Z" />

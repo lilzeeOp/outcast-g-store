@@ -10,10 +10,10 @@ greeting automatically the first time someone messages you.
 👋 Welcome to Outcast G Store!
 
 Thanks for reaching out. You're chatting with the team that delivers genuine
-Steam keys, memberships and gift cards at up to 60% off.
+Steam games, memberships and gift cards at great prices.
 
 If you came from the website, your game is already in your message — just send
-it and we'll confirm stock and payment in a few minutes. Keys are delivered
+it and we'll confirm stock and payment in a few minutes. Your game is delivered
 right here in this chat.
 
 Not sure what to get? Tell us the game you're after or browse
@@ -32,6 +32,6 @@ we'll prioritise it. 🎮
 
 ## Quick replies (WhatsApp Business / Telegram Business)
 
-- `/pay` — "Great, it's in stock ✅. You can pay via UPI to <your UPI id>. Send the screenshot here and your key follows within minutes."
-- `/delivered` — "Your key: `XXXX-XXXX-XXXX` 🎉 Redeem it in Steam → Games → Activate a Product. Message us if anything doesn't work."
+- `/pay` — "Great, it's in stock ✅. You can pay via UPI to <your UPI id>. Send the screenshot here and your game follows within minutes."
+- `/delivered` — "Your game code: `XXXX-XXXX-XXXX` 🎉 Redeem it in Steam → Games → Activate a Product. Message us if anything doesn't work."
 - `/stock` — "Checking stock for you now, one moment ⏳"

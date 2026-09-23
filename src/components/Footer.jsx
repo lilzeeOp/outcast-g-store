@@ -38,7 +38,7 @@ export default function Footer() {
               <span className="logo__name">Outcast G Store</span>
             </Link>
             <p>
-              Outcast G Store is your #1 digital game store — genuine game keys, memberships,
+              Outcast G Store is your #1 digital game store — genuine games, memberships,
               gift cards and top-ups, with instant delivery and unbeatable value.
             </p>
             <div className="trust-badges-row">

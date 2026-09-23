@@ -24,7 +24,7 @@ const FAQS = [
   },
   {
     q: 'Who is Outcast G Store?',
-    a: "We're an independent digital game store focused on genuine keys, fair prices, and fast, no-hassle delivery.",
+    a: "We're an independent digital game store focused on genuine games, fair prices, and fast, no-hassle delivery.",
   },
 ];
 
@@ -36,7 +36,7 @@ export default function Faq() {
         <Link to="/">Home</Link> <span>/</span> <span>FAQ</span>
       </div>
       <h1>Frequently Asked Questions</h1>
-      <p className="lede">Everything you need to know about buying, redeeming, and getting support for your keys.</p>
+      <p className="lede">Everything you need to know about buying, redeeming, and getting support for your games.</p>
 
       {FAQS.map((item) => (
         <details className="faq-item" key={item.q}>

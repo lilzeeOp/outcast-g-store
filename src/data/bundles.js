@@ -12,7 +12,7 @@ export const BUNDLES = [
     tint: ['#0a2f5c', '#03101f'],
     accent: '#38bdf8',
     blurb: '29 Tier 1 games — the trending blockbusters and AAA hits — for one flat price.',
-    features: ['29 Tier 1 Steam keys', 'Blockbusters & AAA titles', 'Priority delivery', 'Steam-activatable keys'],
+    features: ['29 Tier 1 games', 'Blockbusters & AAA titles', 'Priority delivery', 'Activates on Steam'],
   },
   {
     id: 'pro-vault',
@@ -25,7 +25,7 @@ export const BUNDLES = [
     accent: '#3aa6ff',
     highlight: true,
     blurb: '49 Tier 2 games — popular, well-reviewed favourites — for one flat price.',
-    features: ['49 Tier 2 Steam keys', 'Popular favourites', 'Priority delivery', 'Steam-activatable keys'],
+    features: ['49 Tier 2 games', 'Popular favourites', 'Priority delivery', 'Activates on Steam'],
   },
   {
     id: 'ultimate-vault',
@@ -37,7 +37,7 @@ export const BUNDLES = [
     tint: ['#0d2749', '#020712'],
     accent: '#7cc6ff',
     blurb: '99 Tier 3 games — indies, classics and hidden gems — for one flat price.',
-    features: ['99 Tier 3 Steam keys', 'Indies, classics & gems', 'Delivered within 24h', 'Steam-activatable keys'],
+    features: ['99 Tier 3 games', 'Indies, classics & gems', 'Delivered within 24h', 'Activates on Steam'],
   },
 ];
 

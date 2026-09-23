@@ -35,7 +35,7 @@ export default function BundleHero() {
         <h1>Your whole library.
           <br />One price.
         </h1>
-        <p>Flat-priced vaults of genuine Steam keys — choose a tier, pick your games, and we deliver over Telegram.</p>
+        <p>Flat-priced vaults of genuine Steam games — choose a tier, pick your games, and we deliver over Telegram.</p>
 
         <div className="bundle-hero__tabs" role="tablist" aria-label="Choose a vault tier">
           {BUNDLES.map((b, i) => (

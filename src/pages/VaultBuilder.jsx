@@ -5,6 +5,7 @@ import { PRODUCTS, TIERS, findProduct, formatINR } from '../data/products';
 import { rankByQuery, useCatalog } from '../data/catalog';
 import { decodePicks, encodePicks, useVault } from '../context/VaultContext';
 import VaultTray from '../components/VaultTray';
+import QuickAdd from '../components/QuickAdd';
 import ContactModal from '../components/ContactModal';
 import { vaultMessage } from '../lib/contact';
 import useDocumentTitle from '../hooks/useDocumentTitle';
@@ -100,7 +101,7 @@ export default function VaultBuilder() {
           <p className="vb__lede">
             Pick any <strong>Tier {bundle.tier}</strong> titles ({TIERS[bundle.tier].blurb.toLowerCase()}) for your{' '}
             <strong>{bundle.name}</strong> — a flat {inr(bundle.price)}, about {inr(perGame(bundle))} per game. Fill all {bundle.count}{' '}
-            slots yourself, or use “Fill remaining” to top up with the most popular ones.
+            slots by searching above or browsing below, or use “Fill remaining” to top up with the most popular ones.
           </p>
         </div>
         <div className="vb__tiers" role="tablist" aria-label="Switch vault tier">
@@ -113,13 +114,28 @@ export default function VaultBuilder() {
         </div>
       </div>
 
+      <div className="vb__sticky">
+        <QuickAdd
+          pool={pool}
+          picked={picked}
+          full={full}
+          ready={ready}
+          tierLabel={`Tier ${bundle.tier}`}
+          onAdd={(id) => add(bundle.id, id, bundle.count)}
+          onRemove={(id) => remove(bundle.id, id)}
+        />
+        <div className="vb__sticky-count" aria-live="polite">
+          <strong>{pickIds.length}</strong> / {bundle.count} picked
+        </div>
+      </div>
+
       <div className="vb__layout">
         <div className="vb__browse">
           <div className="vb__toolbar">
             <input
               type="search"
               className="vb__search"
-              placeholder={ready ? `Search ${pool.length.toLocaleString('en-IN')} Tier ${bundle.tier} games…` : 'Loading catalogue…'}
+              placeholder={ready ? `Browse ${pool.length.toLocaleString('en-IN')} Tier ${bundle.tier} games…` : 'Loading games…'}
               value={q}
               onChange={(e) => setQ(e.target.value)}
               aria-label="Search games to add"
