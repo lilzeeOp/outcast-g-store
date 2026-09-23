@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import ProductCard from '../components/ProductCard';
+import Scroller from '../components/Scroller';
 import PlatformIcon from '../components/PlatformIcon';
 import OSIcon from '../components/OSIcon';
 import RecentlyViewedRail from '../components/RecentlyViewedRail';
@@ -225,11 +226,11 @@ export default function Product() {
               <h2>More in {product.category}</h2>
             </div>
           </div>
-          <div className="product-scroller">
+          <Scroller>
             {related.map((p) => (
               <ProductCard product={p} key={p.id} />
             ))}
-          </div>
+          </Scroller>
         </div>
       )}
 

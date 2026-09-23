@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import ProductCard from '../components/ProductCard';
+import Scroller from '../components/Scroller';
 import PlatformIcon from '../components/PlatformIcon';
 import BundleHero from '../components/BundleHero';
 import SpotlightHero from '../components/SpotlightHero';
@@ -88,11 +89,11 @@ function ProductRow({ eyebrow, title, viewAllTo, items }) {
             </svg>
           </Link>
         </div>
-        <div className="product-scroller">
+        <Scroller>
           {items.map((p) => (
             <ProductCard product={p} key={p.id} />
           ))}
-        </div>
+        </Scroller>
       </div>
     </div>
   );

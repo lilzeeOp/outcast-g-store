@@ -1,4 +1,5 @@
 import ProductCard from './ProductCard';
+import Scroller from './Scroller';
 import { useRecentlyViewed } from '../context/RecentlyViewedContext';
 import { findProduct } from '../data/products';
 
@@ -17,11 +18,11 @@ export default function RecentlyViewedRail({ excludeId }) {
             <h2>Recently Viewed</h2>
           </div>
         </div>
-        <div className="product-scroller">
+        <Scroller>
           {items.map((p) => (
             <ProductCard product={p} key={p.id} />
           ))}
-        </div>
+        </Scroller>
       </div>
     </div>
   );
