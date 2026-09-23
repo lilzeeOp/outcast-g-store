@@ -266,3 +266,12 @@ h1,h2,h3{text-shadow:none;letter-spacing:-.02em}
   .quick-add__meta{display:none}
   .quick-add__field input{height:42px;font-size:13px;padding-left:38px}
 }
+.quick-add__field input::-webkit-search-cancel-button,.quick-add__field input::-webkit-search-decoration{-webkit-appearance:none;appearance:none;display:none}
+.search-form input::-webkit-search-cancel-button,.vb__search::-webkit-search-cancel-button{-webkit-appearance:none;appearance:none;display:none}
+@media (max-width:860px){
+  .quick-add{position:static}
+  .vb__sticky{position:sticky;flex-wrap:wrap}
+  .quick-add__list{left:8px;right:8px;top:calc(100% - 4px)}
+  .quick-add__name{white-space:normal;font-size:13px;line-height:1.25}
+  .quick-add__thumb{width:44px;height:22px}
+}
