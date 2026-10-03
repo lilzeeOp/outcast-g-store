@@ -8,6 +8,7 @@ import VaultTray from '../components/VaultTray';
 import QuickAdd from '../components/QuickAdd';
 import ContactModal from '../components/ContactModal';
 import { vaultMessage } from '../lib/contact';
+import { bundleBuyLink } from '../lib/telegram';
 import useDocumentTitle from '../hooks/useDocumentTitle';
 
 const PAGE = 24;
@@ -203,6 +204,7 @@ export default function VaultBuilder() {
         title={`Order your ${bundle.name}`}
         message={message}
         copyText={copyText}
+        buyHref={bundleBuyLink(bundle)}
       />
     </div>
   );

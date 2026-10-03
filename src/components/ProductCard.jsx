@@ -6,6 +6,7 @@ import OSIcon from './OSIcon';
 import ContactModal from './ContactModal';
 import { discountPct, formatINR, rating, reviewCount } from '../data/products';
 import { productMessage } from '../lib/contact';
+import { productBuyLink } from '../lib/telegram';
 
 export default function ProductCard({ product }) {
   const off = discountPct(product);
@@ -82,6 +83,7 @@ export default function ProductCard({ product }) {
         onClose={() => setContactOpen(false)}
         title={`Buy ${product.name}`}
         message={productMessage(product)}
+        buyHref={productBuyLink(product)}
       />
     </motion.article>
   );

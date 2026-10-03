@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { BUNDLES, perGame } from '../data/bundles';
 import ContactModal from './ContactModal';
 import { bundleMessage } from '../lib/contact';
+import { bundleBuyLink } from '../lib/telegram';
 
 function inr(n) {
   return '₹' + n.toLocaleString('en-IN');
@@ -101,6 +102,7 @@ export default function BundleHero() {
         onClose={() => setContactOpen(false)}
         title={`Buy the ${bundle.name}`}
         message={bundleMessage(bundle)}
+        buyHref={bundleBuyLink(bundle)}
       />
     </div>
   );

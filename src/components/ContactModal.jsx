@@ -2,7 +2,9 @@ import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { TELEGRAM_USERNAME, WHATSAPP_ENABLED, generalMessage, telegramLink, whatsappLink } from '../lib/contact';
 
-export default function ContactModal({ isOpen, onClose, title, message, copyText }) {
+// `buyHref`: when set (a product/bundle purchase) the Telegram option opens
+// the order bot, which creates the order. Without it, it's a plain chat link.
+export default function ContactModal({ isOpen, onClose, title, message, copyText, buyHref }) {
   const [copied, setCopied] = useState(false);
   useEffect(() => {
     if (!isOpen) return undefined;
@@ -30,12 +32,12 @@ export default function ContactModal({ isOpen, onClose, title, message, copyText
               </svg>
             </button>
             <h3>{title || 'Contact to purchase'}</h3>
-            <p>Reach out and we'll confirm availability, payment, and delivery directly.</p>
+            <p>{buyHref ? 'Place your order on Telegram. You get an Order ID straight away and we confirm payment and delivery in the chat.' : "Reach out and we'll confirm availability, payment, and delivery directly."}</p>
 
             <div className="contact-modal__options">
               <a
                 className="contact-option contact-option--telegram"
-                href={telegramLink(message || generalMessage())}
+                href={buyHref || telegramLink(message || generalMessage())}
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -45,8 +47,12 @@ export default function ContactModal({ isOpen, onClose, title, message, copyText
                   </svg>
                 </span>
                 <span>
-                  <strong>Message on Telegram</strong>
-                  <small>@{TELEGRAM_USERNAME} · your message is pre-typed, just tap send</small>
+                  <strong>{buyHref ? 'Buy on Telegram' : 'Message on Telegram'}</strong>
+                  <small>
+                    {buyHref
+                      ? 'Opens our order bot — tap Start and your order is created instantly'
+                      : `@${TELEGRAM_USERNAME} · your message is pre-typed, just tap send`}
+                  </small>
                 </span>
               </a>
 

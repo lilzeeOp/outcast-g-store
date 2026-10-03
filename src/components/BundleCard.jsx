@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import ContactModal from './ContactModal';
 import { bundleMessage } from '../lib/contact';
+import { bundleBuyLink } from '../lib/telegram';
 import { perGame } from '../data/bundles';
 
 function inr(n) {
@@ -51,6 +52,7 @@ export default function BundleCard({ bundle }) {
         onClose={() => setContactOpen(false)}
         title={`Buy the ${bundle.name}`}
         message={bundleMessage(bundle)}
+        buyHref={bundleBuyLink(bundle)}
       />
     </motion.article>
   );

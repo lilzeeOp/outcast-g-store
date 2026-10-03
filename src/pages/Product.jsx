@@ -10,6 +10,7 @@ import { discountPct, findProduct, formatINR, rating, reviewCount, PRODUCTS, TIE
 import { useRecentlyViewed } from '../context/RecentlyViewedContext';
 import useDocumentTitle from '../hooks/useDocumentTitle';
 import { pairMessage, productMessage } from '../lib/contact';
+import { pairBuyLink, productBuyLink } from '../lib/telegram';
 import { useCatalog } from '../data/catalog';
 
 const FEATURES = [
@@ -145,6 +146,7 @@ export default function Product() {
                   setContact({
                     title: `Buy ${product.name}`,
                     message: productMessage(product),
+                    buyHref: productBuyLink(product),
                   })
                 }
               >
@@ -186,6 +188,7 @@ export default function Product() {
                     setContact({
                       title: 'Buy both games',
                       message: pairMessage(product, bundleItem),
+                      buyHref: pairBuyLink(product, bundleItem),
                     })
                   }
                 >
@@ -241,6 +244,7 @@ export default function Product() {
         onClose={() => setContact(null)}
         title={contact?.title}
         message={contact?.message}
+        buyHref={contact?.buyHref}
       />
     </div>
   );
