@@ -64,7 +64,7 @@ export default function QuickAdd({ pool, picked, full, onAdd, onRemove, ready, t
           ref={inputRef}
           type="search"
           value={q}
-          placeholder={ready ? `Type a ${tierLabel} game and press Enter to add…` : 'Loading games…'}
+          placeholder={ready ? `Type a${tierLabel ? ` ${tierLabel}` : ''} game and press Enter to add…` : 'Loading games…'}
           aria-label="Search games to add to your vault"
           onChange={(e) => {
             setQ(e.target.value);
@@ -83,7 +83,7 @@ export default function QuickAdd({ pool, picked, full, onAdd, onRemove, ready, t
       {open && q.trim() && (
         <ul className="quick-add__list" role="listbox">
           {matches.length === 0 ? (
-            <li className="quick-add__empty">No {tierLabel} games match “{q}”. Try another title or check a different vault.</li>
+            <li className="quick-add__empty">No{tierLabel ? ` ${tierLabel}` : ''} games match “{q}”. Try another title.</li>
           ) : (
             matches.map((p, i) => {
               const on = picked.has(p.id);

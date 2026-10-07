@@ -37,32 +37,32 @@ test('buyLink uses the bot username and the payload', () => {
 });
 
 test('product helper: tiered game with a discount', () => {
-  // 1499 / 83 is how the site stores a ₹1,499 tier price; was = $59.99 list.
-  const p = { id: 'rdr2', name: 'Red Dead Redemption 2 PC', now: 1499 / 83, was: 59.99 };
+  // 350 / 83 is how the site stores a ₹350 tier price; was = $59.99 list.
+  const p = { id: 'rdr2', name: 'Red Dead Redemption 2 PC', now: 350 / 83, was: 59.99 };
   const payload = productStartPayload(p);
-  assert.equal(payload, 'Red-Dead-Redemption-2__1499__70__4979');
+  assert.equal(payload, 'Red-Dead-Redemption-2__350__93__4979');
   assert.ok(SAFE.test(payload));
 });
 
 test('product helper: no discount when list price is lower than ours', () => {
-  const p = { id: 'x', name: 'Cheap Game PC', now: 499 / 83, was: 2.99 };
-  assert.equal(productStartPayload(p), 'Cheap-Game__499');
+  const p = { id: 'x', name: 'Cheap Game PC', now: 200 / 83, was: 1.99 };
+  assert.equal(productStartPayload(p), 'Cheap-Game__200');
 });
 
 test('product helper: long names are shortened to fit, never over 64', () => {
-  const p = { id: 'x', name: "The Things We Don't See: 10 Interactive Stories of Horror, Mystery, and the Unknown PC", now: 499 / 83, was: 5.99 };
+  const p = { id: 'x', name: "The Things We Don't See: 10 Interactive Stories of Horror, Mystery, and the Unknown PC", now: 200 / 83, was: 5.99 };
   const payload = productStartPayload(p);
   assert.ok(payload.length <= PAYLOAD_MAX, payload);
   assert.ok(payload.startsWith('The-Things-We-Don-t-See'));
-  assert.ok(payload.endsWith('__499'));
+  assert.ok(payload.includes('__200__'));
 });
 
 test('product helper: non-Latin names fall back to the Steam app id', () => {
-  const p = { id: 's123456', name: '三国志 PC', now: 999 / 83, was: 29.99 };
+  const p = { id: 's123456', name: '三国志 PC', now: 300 / 83, was: 29.99 };
   const payload = productStartPayload(p);
-  assert.ok(payload.startsWith('Steam-App-123456__999'), payload);
+  assert.ok(payload.startsWith('Steam-App-123456__300'), payload);
 });
 
 test('bundle link carries name and flat price', () => {
-  assert.equal(bundleBuyLink({ name: 'Pro Vault', price: 4999 }), 'https://t.me/outcastgstore_bot?start=Pro-Vault__4999');
+  assert.equal(bundleBuyLink({ name: 'Pro Vault', price: 799 }), 'https://t.me/outcastgstore_bot?start=Pro-Vault__799');
 });

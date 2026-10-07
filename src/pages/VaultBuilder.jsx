@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { BUNDLES, findBundle, perGame } from '../data/bundles';
-import { PRODUCTS, TIERS, findProduct, formatINR } from '../data/products';
+import { PRODUCTS, findProduct, formatINR } from '../data/products';
 import { rankByQuery, useCatalog } from '../data/catalog';
 import { decodePicks, encodePicks, useVault } from '../context/VaultContext';
 import VaultTray from '../components/VaultTray';
@@ -41,10 +41,10 @@ export default function VaultBuilder() {
     }
   }, [searchParams, bundle, setPicks, setSearchParams]);
 
-  // Only Steam games of this vault's tier can go in it.
+  // Any Steam game can go in a vault.
   const pool = useMemo(
-    () => [...PRODUCTS, ...catalog].filter((p) => p.category === 'pc' && p.platform === 'steam' && p.tier === (bundle ? bundle.tier : 0)),
-    [catalog, bundle],
+    () => [...PRODUCTS, ...catalog].filter((p) => p.category === 'pc' && p.platform === 'steam'),
+    [catalog],
   );
 
   const list = useMemo(() => {
@@ -98,18 +98,18 @@ export default function VaultBuilder() {
       <div className="vb__head">
         <div>
           <span className="section__eyebrow">Build your vault</span>
-          <h1>Choose your {bundle.count} Tier {bundle.tier} games</h1>
+          <h1>Choose your {bundle.count} games</h1>
           <p className="vb__lede">
-            Pick any <strong>Tier {bundle.tier}</strong> titles ({TIERS[bundle.tier].blurb.toLowerCase()}) for your{' '}
-            <strong>{bundle.name}</strong> — a flat {inr(bundle.price)}, about {inr(perGame(bundle))} per game. Fill all {bundle.count}{' '}
-            slots by searching above or browsing below, or use “Fill remaining” to top up with the most popular ones.
+            Pick any {bundle.count} games from our full Steam catalogue for your <strong>{bundle.name}</strong> — a flat{' '}
+            {inr(bundle.price)}, about {inr(perGame(bundle))} per game. Search above or browse below, or use “Fill remaining” to
+            top up with the most popular ones.
           </p>
         </div>
         <div className="vb__tiers" role="tablist" aria-label="Switch vault tier">
           {BUNDLES.map((b) => (
             <Link key={b.id} to={`/bundles/build/${b.id}`} className={`vb__tier ${b.id === bundle.id ? 'is-active' : ''}`} role="tab" aria-selected={b.id === bundle.id}>
               <strong>{b.count}</strong>
-              <small>Tier {b.tier} · {inr(b.price)}</small>
+              <small>{inr(b.price)}</small>
             </Link>
           ))}
         </div>
@@ -121,7 +121,7 @@ export default function VaultBuilder() {
           picked={picked}
           full={full}
           ready={ready}
-          tierLabel={`Tier ${bundle.tier}`}
+          tierLabel=""
           onAdd={(id) => add(bundle.id, id, bundle.count)}
           onRemove={(id) => remove(bundle.id, id)}
         />
@@ -136,7 +136,7 @@ export default function VaultBuilder() {
             <input
               type="search"
               className="vb__search"
-              placeholder={ready ? `Browse ${pool.length.toLocaleString('en-IN')} Tier ${bundle.tier} games…` : 'Loading games…'}
+              placeholder={ready ? `Browse ${pool.length.toLocaleString('en-IN')} games…` : 'Loading games…'}
               value={q}
               onChange={(e) => setQ(e.target.value)}
               aria-label="Search games to add"
@@ -163,7 +163,7 @@ export default function VaultBuilder() {
                     </div>
                     <div className="vb-card__body">
                       <h3 title={p.name}>{p.name.replace(/ PC$/, '')}</h3>
-                      <span className="vb-card__meta">Tier {p.tier} · {formatINR(p.now)} alone</span>
+                      <span className="vb-card__meta">{formatINR(p.now)} alone</span>
                       <button
                         type="button"
                         className={`btn btn-sm ${on ? 'btn-dark' : 'btn-outline-dark'} vb-card__btn`}

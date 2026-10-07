@@ -36,7 +36,7 @@ export default function BundleHero() {
         <h1>Your whole library.
           <br />One price.
         </h1>
-        <p>Flat-priced vaults of genuine Steam games — choose a tier, pick your games, and we deliver over Telegram.</p>
+        <p>Flat-priced vaults of genuine Steam games — pick your games, and we deliver over Telegram or WhatsApp.</p>
 
         <div className="bundle-hero__tabs" role="tablist" aria-label="Choose a vault tier">
           {BUNDLES.map((b, i) => (
@@ -47,7 +47,7 @@ export default function BundleHero() {
               role="tab"
               aria-selected={i === tierIndex}
             >
-              <span className="bundle-hero__tab-count">{b.count}</span>
+              <span className="bundle-hero__tab-count">{b.count}+</span>
               <span className="bundle-hero__tab-tag">{b.tag}</span>
             </button>
           ))}
@@ -64,7 +64,7 @@ export default function BundleHero() {
           >
             <div className="bundle-hero__count">
               {bundle.count}
-              <small>Tier {bundle.tier} games</small>
+              <small>+ games</small>
             </div>
             <div className="bundle-hero__panel-body">
               <h2>{bundle.name}</h2>

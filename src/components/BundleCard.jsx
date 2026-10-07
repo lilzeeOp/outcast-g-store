@@ -24,7 +24,7 @@ export default function BundleCard({ bundle }) {
       <span className="bundle-card__tag">{bundle.tag}</span>
       <div className="bundle-card__count">
         {bundle.count}
-        <small>Tier {bundle.tier} games</small>
+        <small>+ games</small>
       </div>
       <h3>{bundle.name}</h3>
       <p>{bundle.blurb}</p>

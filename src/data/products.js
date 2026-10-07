@@ -126,9 +126,10 @@ export function discountPct(p) {
 // Tier 3 = value. Every Steam game gets one; the tier sets its price.
 // ---------------------------------------------------------------------------
 export const TIERS = {
-  1: { price: 1499, label: 'Tier 1', name: 'Top tier', blurb: 'Trending blockbusters and AAA hits' },
-  2: { price: 999, label: 'Tier 2', name: 'Mid tier', blurb: 'Popular, well-reviewed favourites' },
-  3: { price: 499, label: 'Tier 3', name: 'Value tier', blurb: 'Indies, classics and hidden gems' },
+  1: { price: 350, label: 'Tier 1', name: 'Top tier', blurb: 'Trending blockbusters and AAA hits' },
+  2: { price: 300, label: 'Tier 2', name: 'Upper tier', blurb: 'Popular, well-reviewed favourites' },
+  3: { price: 250, label: 'Tier 3', name: 'Mid tier', blurb: 'Solid picks and modern classics' },
+  4: { price: 200, label: 'Tier 4', name: 'Value tier', blurb: 'Indies, retro and hidden gems' },
 };
 
 // rank: popularity position in the Steam catalogue (0 = most owned), or null.
@@ -136,13 +137,15 @@ export function tierFor({ listUsd, rank, spotlight, tag }) {
   if (spotlight) return 1;
   if (rank != null) {
     if (rank < 600 && listUsd >= 25) return 1;
-    if (rank < 3000 || listUsd >= 20) return 2;
-    return 3;
+    if (rank < 2500 || listUsd >= 25) return 2;
+    if (rank < 5500 || listUsd >= 12) return 3;
+    return 4;
   }
   const hot = ['Bestseller', 'Trending', 'Award Winner', 'AAA', 'New Release', 'Deluxe'].includes(tag);
   if (hot && listUsd >= 40) return 1;
-  if (listUsd >= 20) return 2;
-  return 3;
+  if (listUsd >= 25) return 2;
+  if (listUsd >= 12) return 3;
+  return 4;
 }
 
 // Sets p.tier and p.now (kept in the same USD-equivalent unit as `was` so

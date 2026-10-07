@@ -112,7 +112,7 @@ export default function ContactModal({ isOpen, onClose, title, message, copyText
               </span>
             </a>
 
-            <p className="contact-modal__note">Telegram is our official channel. Orders are confirmed and games delivered there.</p>
+            <p className="contact-modal__note">Orders are confirmed and games delivered in the chat you choose.</p>
       </div>
     </div>,
     document.body,

@@ -1,8 +1,7 @@
 // Telegram handle confirmed (@OUTCASTGSTORE).
 export const TELEGRAM_USERNAME = 'outcastgstore';
-export const WHATSAPP_NUMBER = '910000000000'; // country code + number, no symbols
-// WhatsApp isn't live yet: the UI shows it as "coming soon" until this is true.
-export const WHATSAPP_ENABLED = false;
+export const WHATSAPP_NUMBER = '917620045411'; // country code + number, no symbols
+export const WHATSAPP_ENABLED = true;
 
 // Opens the store's own Telegram chat with the message pre-typed (Telegram's
 // `text` deep-link parameter). No bot in the middle: buyers talk to the team.
@@ -62,7 +61,7 @@ export function bundleMessage(bundle) {
     GREETING,
     '',
     `I'd like the ${bundle.name} \ud83e\uddf0`,
-    `\ud83c\udfae ${bundle.count} Tier ${bundle.tier} games for a flat ${inr(bundle.price)}`,
+    `\ud83c\udfae ${bundle.count} games for a flat ${inr(bundle.price)}`,
     `\ud83d\udd17 ${SITE}/bundles`,
     '',
     "I'm happy for you to pick the games. " + CLOSE,
@@ -76,12 +75,14 @@ export function vaultMessage(bundle, titles, shareUrl, cap = 40) {
     GREETING,
     '',
     `I'd like to order the ${bundle.name} \ud83e\uddf0`,
-    `\ud83c\udfae ${bundle.count} Tier ${bundle.tier} games for a flat ${inr(bundle.price)}`,
+    `\ud83c\udfae ${bundle.count} games for a flat ${inr(bundle.price)}`,
     '',
     `My picks (${titles.length}):`,
     ...listed,
     ...more,
-    `\ud83d\udd17 Full list: ${shareUrl}`,
+    // Chat apps cap a message near 4,000 characters; big vaults encode hundreds
+    // of ids in the share link, so fall back to "pasting next" when it won't fit.
+    shareUrl.length <= 1200 ? `\ud83d\udd17 Full list: ${shareUrl}` : '\ud83d\udccb Full list: pasting it in my next message',
     '',
     CLOSE,
   ].join('\n');
